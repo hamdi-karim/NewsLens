@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+
+# Build output & coverage
+dist
+dist-ssr
+coverage
+
+# Secrets (keep .env.example tracked)
+.env
+.env.*
+!.env.example
+*.local
+
+# Local AI context & settings
+context/
+CLAUDE.md
+.claude/settings.local.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
