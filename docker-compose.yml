@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    # Compose reads .env for interpolation. Empty defaults keep every variable defined:
+    # an undefined one would stay as a literal ${...} in the Nginx config and stop it from starting.
+    environment:
+      GUARDIAN_API_KEY: ${GUARDIAN_API_KEY:-}
+      NYT_API_KEY: ${NYT_API_KEY:-}
+      NEWSAPI_API_KEY: ${NEWSAPI_API_KEY:-}

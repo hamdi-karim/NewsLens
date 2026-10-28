@@ -1,0 +1,69 @@
+# Rendered by the official nginx image at startup: files in /etc/nginx/templates/*.template
+# go through envsubst into /etc/nginx/conf.d/. Only variables that exist in the environment
+# are substituted, so Nginx's own variables ($uri, $1, ...) are left untouched.
+#
+# API keys are added here, server-side. The browser only ever calls same-origin /api/*.
+# Note: proxy_set_header is not inherited once a location sets any, so each proxy
+# location repeats the full set.
+
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+
+    # SPA: unknown paths render index.html, which must never be cached.
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache";
+    }
+
+    # Vite emits content-hashed file names, so these can be cached forever.
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # --- API proxy: allowlisted endpoints only -------------------------------------
+
+    location = /api/guardian/search {
+        # A "?" in the rewrite target makes Nginx append the original query string with "&".
+        rewrite ^ /search?api-key=${GUARDIAN_API_KEY} break;
+        proxy_pass https://content.guardianapis.com;
+        proxy_set_header Host content.guardianapis.com;
+        proxy_set_header Cookie "";
+        proxy_set_header Origin "";
+        proxy_set_header Referer "";
+        proxy_ssl_server_name on;
+    }
+
+    location = /api/nyt/articlesearch.json {
+        rewrite ^ /svc/search/v2/articlesearch.json?api-key=${NYT_API_KEY} break;
+        proxy_pass https://api.nytimes.com;
+        proxy_set_header Host api.nytimes.com;
+        proxy_set_header Cookie "";
+        proxy_set_header Origin "";
+        proxy_set_header Referer "";
+        proxy_ssl_server_name on;
+    }
+
+    location ~ ^/api/newsapi/(everything|top-headlines)$ {
+        # No "?" in the target, so the original query string is kept as-is.
+        rewrite ^/api/newsapi/(.*)$ /v2/$1 break;
+        proxy_pass https://newsapi.org;
+        proxy_set_header Host newsapi.org;
+        # Quoted so an empty key still yields a valid directive (Nginx then omits the header).
+        proxy_set_header X-Api-Key "${NEWSAPI_API_KEY}";
+        proxy_set_header User-Agent "NewsLens/1.0";
+        proxy_set_header Cookie "";
+        proxy_set_header Origin "";
+        proxy_set_header Referer "";
+        proxy_ssl_server_name on;
+    }
+
+    # Anything else under /api/ is not ours to proxy (and must not fall back to index.html).
+    location /api/ {
+        return 404;
+    }
+}
