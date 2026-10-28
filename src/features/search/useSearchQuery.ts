@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router";
 import type { ArticleQuery } from "@/domain/types";
 import {
   hasActiveFilters,
-  isIdleQuery,
   parseSearchParams,
   toSearchParams,
 } from "./searchParams";
@@ -32,7 +31,6 @@ export function useSearchQuery() {
   return {
     query,
     setQuery,
-    isIdle: isIdleQuery(query),
     hasActiveFilters: hasActiveFilters(query),
   };
 }

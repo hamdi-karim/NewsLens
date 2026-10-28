@@ -42,7 +42,7 @@ export function buildNewsApiRequests(query: ArticleQuery): NewsApiRequest[] {
           q: query.keyword,
           from: query.from,
           to: query.to,
-          sortBy: "publishedAt",
+          sortBy: query.sort === "relevance" ? "relevancy" : "publishedAt",
           language: "en",
           ...paging,
         },

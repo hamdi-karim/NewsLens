@@ -355,7 +355,11 @@ describe("mergeArticles", () => {
       publishedAt: "2026-10-28T11:00:00Z",
     });
 
-    const merged = mergeArticles([fromNewsApi, fromGuardian], sources);
+    const merged = mergeArticles(
+      [fromNewsApi, fromGuardian],
+      "newest",
+      sources,
+    );
 
     expect(merged).toEqual([fromGuardian]);
   });
@@ -370,7 +374,57 @@ describe("mergeArticles", () => {
       publishedAt: "2026-10-28T00:00:00Z",
     });
 
-    expect(mergeArticles([older, newer], sources)).toEqual([newer, older]);
+    expect(mergeArticles([older, newer], "newest", sources)).toEqual([
+      newer,
+      older,
+    ]);
+  });
+
+  it("interleaves by rank for relevance, keeping each source's order and ignoring dates", () => {
+    const g1 = makeArticle("guardian", {
+      title: "g1",
+      publishedAt: "2026-01-01T00:00:00Z",
+    });
+    const g2 = makeArticle("guardian", {
+      title: "g2",
+      publishedAt: "2026-10-28T00:00:00Z",
+    });
+    const g3 = makeArticle("guardian", { title: "g3" });
+    const n1 = makeArticle("nyt", { title: "n1" });
+    const a1 = makeArticle("newsapi", { title: "a1" });
+    const a2 = makeArticle("newsapi", { title: "a2" });
+
+    // Input arrives grouped any way; only each source's internal order matters.
+    const merged = mergeArticles(
+      [a1, a2, n1, g1, g2, g3],
+      "relevance",
+      sources,
+    );
+
+    expect(merged.map((a) => a.title)).toEqual([
+      "g1",
+      "n1",
+      "a1",
+      "g2",
+      "a2",
+      "g3",
+    ]);
+  });
+
+  it("ranks after dedupe for relevance, so a dropped duplicate leaves no gap", () => {
+    const g1 = makeArticle("guardian", {
+      title: "g1",
+      url: "https://x.com/shared",
+    });
+    const a1 = makeArticle("newsapi", {
+      title: "a1",
+      url: "https://x.com/shared/",
+    });
+    const a2 = makeArticle("newsapi", { title: "a2" });
+
+    const merged = mergeArticles([a1, a2, g1], "relevance", sources);
+
+    expect(merged.map((a) => a.title)).toEqual(["g1", "a2"]);
   });
 });
 

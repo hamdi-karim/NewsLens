@@ -13,6 +13,10 @@ export const CATEGORIES = [
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
 
+// "relevance" only makes sense with a keyword; the caller decides which to use.
+export const SORT_ORDERS = ["newest", "relevance"] as const;
+export type SortOrder = (typeof SORT_ORDERS)[number];
+
 // Page size for sources that let us choose it (NYT is fixed at 10).
 export const DEFAULT_PAGE_SIZE = 20;
 
@@ -36,6 +40,7 @@ export interface ArticleQuery {
   categories: Category[];
   sources: SourceId[];
   authors: string[];
+  sort: SortOrder;
   page: number; // 1-based
 }
 

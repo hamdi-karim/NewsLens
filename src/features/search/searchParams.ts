@@ -22,14 +22,17 @@ export function parseSearchParams(params: URLSearchParams): ArticleQuery {
   }
 
   const sources = parseList(params.getAll(PARAM.sources), SOURCE_IDS);
+  const keyword = params.get(PARAM.keyword)?.trim() || undefined;
 
   return {
-    keyword: params.get(PARAM.keyword)?.trim() || undefined,
+    keyword,
     from,
     to,
     categories: parseList(params.getAll(PARAM.categories), CATEGORIES),
     sources: sources.length > 0 ? sources : [...SOURCE_IDS],
     authors: [],
+    // Derived, not stored in the URL: relevance only means something with a keyword.
+    sort: keyword ? "relevance" : "newest",
     page: 1,
   };
 }
@@ -47,13 +50,6 @@ export function toSearchParams(query: ArticleQuery): URLSearchParams {
     for (const source of query.sources) params.append(PARAM.sources, source);
   }
   return params;
-}
-
-// Idle: nothing to search for yet, so /search makes no request (saves API quota).
-export function isIdleQuery(query: ArticleQuery): boolean {
-  return (
-    !query.keyword && !query.from && !query.to && query.categories.length === 0
-  );
 }
 
 // True when any filter (not the keyword) differs from the defaults.
@@ -81,4 +77,15 @@ function parseList<T extends string>(
   allowed: readonly T[],
 ): T[] {
   return allowed.filter((item) => values.includes(item));
+}
+
+// Resets dates, categories, and sources; keeps the keyword.
+export function clearFilters(query: ArticleQuery): ArticleQuery {
+  return {
+    ...query,
+    from: undefined,
+    to: undefined,
+    categories: [],
+    sources: [...SOURCE_IDS],
+  };
 }

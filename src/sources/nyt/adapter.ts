@@ -29,7 +29,7 @@ export function buildNytParams(query: ArticleQuery): QueryParams {
     end_date: toNytDate(query.to),
     fq: toSectionFilter(sectionsFor(NYT_SECTIONS, query.categories)),
     page: query.page - 1, // NYT pages are 0-based
-    sort: "newest",
+    sort: query.sort, // the API's values match ours: "newest" | "relevance"
   };
 }
 

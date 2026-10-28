@@ -34,6 +34,14 @@ describe("buildNewsApiRequests", () => {
     ]);
   });
 
+  it("maps relevance to sortBy=relevancy on /everything", () => {
+    const [request] = buildNewsApiRequests(
+      makeQuery({ keyword: "ai", sort: "relevance" }),
+    );
+
+    expect(request?.params).toMatchObject({ sortBy: "relevancy" });
+  });
+
   it("uses one /top-headlines call without a keyword or categories", () => {
     expect(buildNewsApiRequests(makeQuery({ from: "2026-10-20" }))).toEqual([
       {

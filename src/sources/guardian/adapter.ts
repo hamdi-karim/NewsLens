@@ -18,7 +18,7 @@ export function buildGuardianParams(query: ArticleQuery): QueryParams {
     section: sectionsFor(GUARDIAN_SECTIONS, query.categories).join("|"),
     page: query.page,
     "page-size": DEFAULT_PAGE_SIZE,
-    "order-by": "newest",
+    "order-by": query.sort, // the API's values match ours: "newest" | "relevance"
     "show-fields": "trailText,thumbnail,byline",
   };
 }

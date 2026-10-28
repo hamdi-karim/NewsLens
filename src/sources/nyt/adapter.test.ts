@@ -35,6 +35,12 @@ describe("buildNytParams", () => {
     });
   });
 
+  it("sorts by relevance when asked", () => {
+    expect(
+      buildNytParams(makeQuery({ keyword: "ai", sort: "relevance" })),
+    ).toMatchObject({ sort: "relevance" });
+  });
+
   it("sends no filter without categories", () => {
     expect(buildNytParams(makeQuery())).toMatchObject({
       q: undefined,

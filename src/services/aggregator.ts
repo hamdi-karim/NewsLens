@@ -4,6 +4,7 @@ import type {
   ArticleQuery,
   FilterCapabilities,
   NewsSource,
+  SortOrder,
   SourceId,
 } from "@/domain/types";
 import { SOURCES } from "@/sources/registry";
@@ -94,7 +95,7 @@ export async function fetchArticles(
     throw new AllSourcesFailedError(page.failedSources);
   }
 
-  page.articles = mergeArticles(articles, sources);
+  page.articles = mergeArticles(articles, query.sort, sources);
   return page;
 }
 
@@ -126,13 +127,16 @@ function applyClientFilters(
   });
 }
 
-// Dedupes by normalized URL (the source listed first in `sources` wins), then sorts newest first.
+// Dedupes by normalized URL (the source listed first in `sources` wins), then orders by `sort`.
+// `articles` must keep each source's own order (its relevance ranking).
 export function mergeArticles(
   articles: Article[],
+  sort: SortOrder,
   sources: readonly NewsSource[] = SOURCES,
 ): Article[] {
   const priority = (article: Article) =>
     sources.findIndex((source) => source.id === article.source);
+  // Stable sort: each source's own order is kept.
   const byPriority = [...articles].sort((a, b) => priority(a) - priority(b));
 
   const seen = new Set<string>();
@@ -143,7 +147,23 @@ export function mergeArticles(
     return true;
   });
 
-  return unique.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  if (sort === "newest") {
+    return unique.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  }
+
+  // Relevance scores aren't comparable across providers, so interleave by rank:
+  // every source's #1 (in priority order), then every #2, and so on.
+  const ranks = new Map<SourceId, number>();
+  const ranked = unique.map((article) => {
+    const rank = ranks.get(article.source) ?? 0;
+    ranks.set(article.source, rank + 1);
+    return { article, rank };
+  });
+  return ranked
+    .sort(
+      (a, b) => a.rank - b.rank || priority(a.article) - priority(b.article),
+    )
+    .map(({ article }) => article);
 }
 
 // Host (lowercased by URL) + path, without protocol, query string, hash, or trailing slash.

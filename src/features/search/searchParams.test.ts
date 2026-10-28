@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { SOURCE_IDS } from "@/domain/types";
 import { makeQuery } from "@/test/query";
 import {
+  clearFilters,
   hasActiveFilters,
-  isIdleQuery,
   parseSearchParams,
   toSearchParams,
 } from "./searchParams";
@@ -28,8 +28,15 @@ describe("parseSearchParams", () => {
         to: "2026-10-28",
         categories: ["world", "science"], // canonical order
         sources: ["nyt"],
+        sort: "relevance",
       }),
     );
+  });
+
+  it("sorts by relevance with a keyword and newest without one", () => {
+    expect(parse("?q=ai").sort).toBe("relevance");
+    expect(parse("?categories=world").sort).toBe("newest");
+    expect(parse("?q=%20").sort).toBe("newest");
   });
 
   it("drops unknown and duplicate list values", () => {
@@ -92,27 +99,15 @@ describe("toSearchParams", () => {
       to: "2026-10-28",
       categories: ["politics"],
       sources: ["guardian", "newsapi"],
+      sort: "relevance",
     });
 
     expect(parseSearchParams(toSearchParams(query))).toEqual(query);
   });
 });
 
-describe("isIdleQuery / hasActiveFilters", () => {
+describe("hasActiveFilters", () => {
   const all = [...SOURCE_IDS];
-
-  it("is idle with no keyword, dates, or categories", () => {
-    expect(isIdleQuery(makeQuery({ sources: all }))).toBe(true);
-    expect(isIdleQuery(makeQuery({ sources: ["nyt"] }))).toBe(true);
-  });
-
-  it.each([
-    { keyword: "ai" },
-    { from: "2026-10-01" },
-    { categories: ["world" as const] },
-  ])("is not idle with %j", (overrides) => {
-    expect(isIdleQuery(makeQuery({ sources: all, ...overrides }))).toBe(false);
-  });
 
   it("counts dates, categories, and a source subset as active filters, not the keyword", () => {
     expect(hasActiveFilters(makeQuery({ keyword: "ai", sources: all }))).toBe(
@@ -125,5 +120,20 @@ describe("isIdleQuery / hasActiveFilters", () => {
       hasActiveFilters(makeQuery({ categories: ["health"], sources: all })),
     ).toBe(true);
     expect(hasActiveFilters(makeQuery({ sources: ["nyt"] }))).toBe(true);
+  });
+});
+
+describe("clearFilters", () => {
+  it("resets dates, categories, and sources but keeps the keyword", () => {
+    const query = makeQuery({
+      keyword: "ai",
+      from: "2026-10-01",
+      categories: ["world"],
+      sources: ["nyt"],
+    });
+
+    expect(clearFilters(query)).toEqual(
+      makeQuery({ keyword: "ai", sources: [...SOURCE_IDS] }),
+    );
   });
 });

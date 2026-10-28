@@ -14,6 +14,7 @@ export const articleKeys = {
         to: query.to,
         categories: query.categories,
         sources: query.sources,
+        sort: query.sort,
       },
     ] as const,
 };

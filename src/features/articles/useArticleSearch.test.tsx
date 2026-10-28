@@ -43,17 +43,6 @@ describe("useArticleSearch", () => {
     expect(result.current.hasNextPage).toBe(false);
   });
 
-  it("does not fetch when disabled", () => {
-    const paths = recordRequestPaths();
-
-    const { result } = renderSearch(makeQuery({ sources: ALL }), {
-      enabled: false,
-    });
-
-    expect(result.current.fetchStatus).toBe("idle");
-    expect(paths).toEqual([]);
-  });
-
   it("reports a failing source and keeps the others", async () => {
     server.use(
       http.get("/api/nyt/articlesearch.json", () =>

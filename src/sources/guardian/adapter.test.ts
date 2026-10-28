@@ -29,6 +29,12 @@ describe("buildGuardianParams", () => {
     });
   });
 
+  it("orders by relevance when asked", () => {
+    expect(
+      buildGuardianParams(makeQuery({ keyword: "ai", sort: "relevance" })),
+    ).toMatchObject({ "order-by": "relevance" });
+  });
+
   it("leaves optional filters empty", () => {
     expect(buildGuardianParams(makeQuery())).toMatchObject({
       q: undefined,
