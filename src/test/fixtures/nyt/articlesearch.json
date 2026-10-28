@@ -1,0 +1,188 @@
+{
+  "status": "OK",
+  "copyright": "Copyright (c) 2026 The New York Times Company. All Rights Reserved.",
+  "response": {
+    "docs": [
+      {
+        "abstract": "Plus, Israel’s election, Flávio Bolsonaro and a Gen Z cookbook.",
+        "byline": {
+          "original": "By Sam Sifton"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "A.I. by the Numbers",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/e07afd0b-0eab-5417-a169-1d37fa707cf7",
+        "multimedia": {
+          "caption": "In San Francisco. ",
+          "credit": "Jason Henry for The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/10/28/multimedia/28themorning-anthropic2-gckm/28themorning-anthropic2-gckm-articleLarge.jpg",
+            "height": 600,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/10/28/multimedia/28themorning-anthropic2-gckm/28themorning-anthropic2-gckm-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "NYTNow",
+        "pub_date": "2026-10-28T10:59:57Z",
+        "section_name": "Briefing",
+        "snippet": "Plus, Israel’s election, Flávio Bolsonaro and a Gen Z cookbook.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "briefing",
+        "web_url": "https://www.nytimes.com/2026/10/28/briefing/ai-by-the-numbers.html"
+      },
+      {
+        "abstract": "A Berlin production of “The Flying Dutchman” transforms Wagner’s opera into a provocative allegory amid fears of political interference and censorship in the arts.",
+        "byline": {
+          "original": "By Thomas Rogers"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "Can Artists Speak Freely About Israel? This Opera Tests the Limits.",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/c6d0f8c6-f7e6-580d-aece-1c46c34b8cff",
+        "multimedia": {
+          "caption": "Milo Rau’s radical reinterpretation of Richard Wagner’s “The Flying Dutchman” at the Deutsche Oper Berlin.",
+          "credit": "Matthias Horn",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/10/28/arts/28cul-flying-dutchman/28cul-flying-dutchman-articleLarge.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/10/28/arts/28cul-flying-dutchman/28cul-flying-dutchman-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Culture",
+        "pub_date": "2026-10-28T09:00:17Z",
+        "section_name": "Arts",
+        "snippet": "A Berlin production of “The Flying Dutchman” transforms Wagner’s opera into a provocative allegory amid fears of political interference and censorship in the arts.",
+        "source": "The New York Times",
+        "subsection_name": "Music",
+        "type_of_material": "News",
+        "web_url": "https://www.nytimes.com/2026/10/28/arts/music/the-flying-dutchman-milo-rau-deutsche-oper.html"
+      },
+      {
+        "abstract": "It’s the hot weather word of the year, but what does it actually mean? We’ve got answers to all the most pressing El Niño questions.",
+        "byline": {
+          "original": "By Judson Jones, Chico Harlan and Raymond Zhong"
+        },
+        "document_type": "interactive",
+        "headline": {
+          "main": "Everything You Could Possibly Want to Know About El Niño",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://interactive/4d04281a-258b-5363-ae17-d9839c7c5606",
+        "multimedia": {
+          "caption": "",
+          "credit": "",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/10/26/arts/elnino-promo32_cover/elnino-promo32_cover-articleLarge-v5.jpg",
+            "height": 400,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/10/26/arts/elnino-promo32_cover/elnino-promo32_cover-thumbStandard-v6.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Climate",
+        "pub_date": "2026-10-28T00:33:10Z",
+        "section_name": "Science",
+        "snippet": "It’s the hot weather word of the year, but what does it actually mean? We’ve got answers to all the most pressing El Niño questions.",
+        "source": "The New York Times",
+        "subsection_name": "Environment",
+        "type_of_material": "Interactive Feature",
+        "web_url": "https://www.nytimes.com/interactive/2026/10/27/science/earth/el-nino-climate-faq.html"
+      },
+      {
+        "abstract": "The case, La Rose v. His Majesty the King, is the first youth-led federal case in Canada to be heard.",
+        "byline": {
+          "original": "By David Gelles"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "Canada’s Climate Policies Go on Trial",
+          "kicker": "",
+          "print_headline": ""
+        },
+        "_id": "nyt://article/a9650faa-ec24-52e2-8ca6-7da4abb0dab0",
+        "multimedia": {
+          "caption": "Climate demonstrators rallied in Vancouver, where the first federal youth climate trial in Canadian history was filed on Monday.",
+          "credit": "Don Mackinnon/Agence France-Presse — Getty Images",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/10/27/multimedia/27cli-newsletter-canada-01-tfjb/27cli-newsletter-canada-01-tfjb-articleLarge.jpg",
+            "height": 405,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/10/27/multimedia/27cli-newsletter-canada-01-tfjb/27cli-newsletter-canada-01-tfjb-thumbStandard.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Climate",
+        "pub_date": "2026-10-27T17:26:05Z",
+        "section_name": "Climate",
+        "snippet": "The case, La Rose v. His Majesty the King, is the first youth-led federal case in Canada to be heard.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "web_url": "https://www.nytimes.com/2026/10/27/climate/canada-youth-climate-lawsuit.html"
+      },
+      {
+        "abstract": "The average cost of a 100-piece bag has jumped 71 percent in the last five years. Consumers are thinking twice about what they’ll spend.",
+        "byline": {
+          "original": "By Kim Severson"
+        },
+        "document_type": "article",
+        "headline": {
+          "main": "The Scariest Part of Halloween This Year? The Candy Prices.",
+          "kicker": "",
+          "print_headline": "The Scariest Part of Halloween This Year: Candy Prices"
+        },
+        "_id": "nyt://article/e4d8c5a3-aa1f-58f8-9bab-96c91304045d",
+        "multimedia": {
+          "caption": "Chocolate candy has gotten more expensive in the past few years, so more households are turning to sour, fruity and gummy candy.",
+          "credit": "Swikar Patel for The New York Times",
+          "default": {
+            "url": "https://static01.nyt.com/images/2026/10/28/multimedia/28FD-halloween-candy4-lzvj/27FD-halloween-candy4-lzvj-articleLarge.jpg",
+            "height": 449,
+            "width": 600
+          },
+          "thumbnail": {
+            "url": "https://static01.nyt.com/images/2026/10/28/multimedia/28FD-halloween-candy4-lzvj/28FD-halloween-candy4-lzvj-thumbStandard-v2.jpg",
+            "height": 75,
+            "width": 75
+          }
+        },
+        "news_desk": "Dining",
+        "pub_date": "2026-10-27T09:03:09Z",
+        "section_name": "Food",
+        "snippet": "The average cost of a 100-piece bag has jumped 71 percent in the last five years. Consumers are thinking twice about what they’ll spend.",
+        "source": "The New York Times",
+        "subsection_name": "",
+        "type_of_material": "News",
+        "web_url": "https://www.nytimes.com/2026/10/27/dining/halloween-candy-prices.html"
+      }
+    ],
+    "metadata": {
+      "hits": 5,
+      "offset": 0,
+      "time": 0
+    }
+  }
+}

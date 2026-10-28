@@ -1,0 +1,98 @@
+{
+  "response": {
+    "status": "ok",
+    "userTier": "developer",
+    "total": 5,
+    "startIndex": 1,
+    "pageSize": 5,
+    "currentPage": 1,
+    "pages": 1,
+    "orderBy": "newest",
+    "results": [
+      {
+        "id": "australia-news/2026/oct/28/menindee-lakes-water-levels-drop-mass-fish-death-fears",
+        "type": "article",
+        "sectionId": "australia-news",
+        "sectionName": "Australia news",
+        "webPublicationDate": "2026-10-28T14:00:07Z",
+        "webTitle": "Menindee Lakes water levels drop to lowest in five years as experts warn of mass fish deaths",
+        "webUrl": "https://www.theguardian.com/australia-news/2026/oct/28/menindee-lakes-water-levels-drop-mass-fish-death-fears",
+        "fields": {
+          "trailText": "NSW government imposes water restrictions after Menindee water volumes fall below 2021 levels",
+          "byline": "Lisa Cox Environment and climate correspondent",
+          "thumbnail": "https://media.guim.co.uk/c3335a7db319a4242e148d1c0c6a6d1d24937c4c/144_0_1410_1128/500.jpg"
+        },
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "us-news/2026/oct/28/first-thing-israeli-election-elon-musk-ai-odyssey",
+        "type": "article",
+        "sectionId": "us-news",
+        "sectionName": "US news",
+        "webPublicationDate": "2026-10-28T11:33:27Z",
+        "webTitle": "Both blocs claim upper hand in crucial Israeli election | First Thing",
+        "webUrl": "https://www.theguardian.com/us-news/2026/oct/28/first-thing-israeli-election-elon-musk-ai-odyssey",
+        "fields": {
+          "trailText": "Benjamin Netanyahu vows to form new coalition while opposition bloc leader says result shows prime minister should step down",
+          "byline": "Martin Belam"
+        },
+        "isHosted": false,
+        "pillarId": "pillar/news",
+        "pillarName": "News"
+      },
+      {
+        "id": "books/2026/oct/28/no-inevitable-dystopia-jeanette-winterson-ai-future-of-humanity",
+        "type": "article",
+        "sectionId": "books",
+        "sectionName": "Books",
+        "webPublicationDate": "2026-10-28T10:00:05Z",
+        "webTitle": "‘There is no inevitable dystopia’: Jeanette Winterson on AI and the future of humanity",
+        "webUrl": "https://www.theguardian.com/books/2026/oct/28/no-inevitable-dystopia-jeanette-winterson-ai-future-of-humanity",
+        "fields": {
+          "trailText": "<strong>Analysis:</strong> The author believes we are at a turning point as a species – and even in the shadow of big tech it’s up to us how we want to proceed<strong><br></strong> &amp; more",
+          "byline": "Aida Edemariam",
+          "thumbnail": "https://media.guim.co.uk/a8bb7ed7e6602f38677e183ed940fad6e2200bc1/176_0_6160_4928/500.jpg"
+        },
+        "isHosted": false,
+        "pillarId": "pillar/arts",
+        "pillarName": "Arts"
+      },
+      {
+        "id": "commentisfree/2026/oct/28/psychopatriarchy-politics-opinion",
+        "type": "article",
+        "sectionId": "commentisfree",
+        "sectionName": "Opinion",
+        "webPublicationDate": "2026-10-28T10:00:03Z",
+        "webTitle": "We are seeing the rise of psychopatriarchy everywhere | V (Formerly Eve Ensler)",
+        "webUrl": "https://www.theguardian.com/commentisfree/2026/oct/28/psychopatriarchy-politics-opinion",
+        "fields": {
+          "trailText": "Psychopatriarchy is jet fuel to racism, colonialism, imperialism and capitalism",
+          "byline": "V (formerly Eve Ensler)",
+          "thumbnail": "https://media.guim.co.uk/ae839dfffbe28db93e339c55b11b0307b6a52352/127_0_1815_1452/500.jpg"
+        },
+        "isHosted": false,
+        "pillarId": "pillar/opinion",
+        "pillarName": "Opinion"
+      },
+      {
+        "id": "commentisfree/2026/oct/28/nicholas-stern-report-climate-consensus-lessons-capitalism",
+        "type": "article",
+        "sectionId": "commentisfree",
+        "sectionName": "Opinion",
+        "webPublicationDate": "2026-10-28T08:00:01Z",
+        "webTitle": "The climate crisis will destroy our economies – we learned this 20 years ago. When will we act? | Fiona Harvey",
+        "webUrl": "https://www.theguardian.com/commentisfree/2026/oct/28/nicholas-stern-report-climate-consensus-lessons-capitalism",
+        "fields": {
+          "trailText": "The radical Stern report showed that a low-carbon future is also good economics. But it seems that capitalism needs a reminder, says Fiona Harvey, an environment editor at the Guardian",
+          "byline": "Fiona Harvey",
+          "thumbnail": "https://media.guim.co.uk/8a25da344e4a160ea6fa6bbb0234785134f52480/293_0_2915_2333/500.jpg"
+        },
+        "isHosted": false,
+        "pillarId": "pillar/opinion",
+        "pillarName": "Opinion"
+      }
+    ]
+  }
+}

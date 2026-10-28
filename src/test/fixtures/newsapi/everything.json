@@ -1,0 +1,78 @@
+{
+  "status": "ok",
+  "totalResults": 6,
+  "articles": [
+    {
+      "source": {
+        "id": null,
+        "name": "SoyaCincau.com"
+      },
+      "author": "Chief Chapree",
+      "title": "Tesla Cybercab coming to Malaysia this week: Showcase tour confirmed",
+      "description": "The Tesla Cybercab will make its official debut in Malaysia later this week. The tour was confirmed by Tesla Malaysia on its official Instagram page. The 2-seater robotaxi is currently touring Southeast Asia, having kicked off in Singapore earlier this month.…",
+      "url": "https://soyacincau.com/2026/10/27/tesla-cybercab-malaysia-tour-location-schedule/",
+      "urlToImage": "https://soyacincau.com/wp-content/uploads/2026/10/261027-tesla-cybercab-02.jpg",
+      "publishedAt": "2026-10-27T14:21:53Z"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "The Conversation Africa"
+      },
+      "author": "Annika Surmeier, Senior Lecturer, Graduate School of Business, University of Cape Town, University of Cape Town, Addisu Lashitew, Associate professor, Business, McMaster University, Bongi Bangeni, Senior Lecturer in Educational Development, University of Cape Town, David Littlewood, Senior Lecturer in Strategic Management, University of Sheffield, Gideon Nomdo, Course coordinator: Language in Humanities, University of Cape Town, Kasturi Behari-Leak, Academic Staff Development Lecturer, Centre for Higher Education Development, University of Cape Town, Phyllis Awor, Lecturer in Public Health, Makerere University",
+      "title": "African universities can do more than teach and research: they can drive social change",
+      "description": "African universities can help solve social problems by changing their own institutions, supporting emerging ventures and bringing other problem-solvers together.",
+      "url": "https://theconversation.com/african-universities-can-do-more-than-teach-and-research-they-can-drive-social-change-293112",
+      "urlToImage": "https://images.theconversation.com/files/764474/original/file-20261007-50-3f8xoj.jpg?ixlib=rb-4.1.1&rect=94%2C339%2C1038%2C513&q=45&auto=format&w=1356&h=668&fit=crop",
+      "publishedAt": "2026-10-27T14:20:17Z"
+    },
+    {
+      "source": {
+        "id": "the-times-of-india",
+        "name": "The Times of India"
+      },
+      "author": "ET Online",
+      "title": "UK's 'Be Ready' campaign: Is Britain preparing for war amid Wes Streeting's warning over Putin's Russia threat?",
+      "description": "The UK government has launched its ‘Be Ready’ campaign, urging households to stock up on food, water and other essentials to survive at least 72 hours during an emergency. The initiative comes as Defence Secretary Wes Streeting warns that Britain must be prep…",
+      "url": "https://economictimes.indiatimes.com/news/international/world-news/uks-be-ready-campaign-is-britain-preparing-for-war-amid-wes-streetings-warning-over-putins-russia-threat/articleshow/135237221.cms",
+      "urlToImage": "https://img.etimg.com/thumb/msid-135237425,width-1200,height-900,imgsize-98822,overlay-economictimes/articleshow.jpg",
+      "publishedAt": "2026-10-27T14:18:50Z"
+    },
+    {
+      "source": {
+        "id": "fortune",
+        "name": "Fortune"
+      },
+      "author": "The Associated Press, Jennifer McDermott, Alexa St. John",
+      "title": "U.S. classes helium as a critical material for semiconductors — after Iran War makes it hard to source from Qatar",
+      "description": "Energy Secretary Chris Wright said the Trump administration is freeing America from reliance on foreign sources of critical materials.",
+      "url": "https://fortune.com/2026/10/27/semiconductors-helium-us-energy-department/",
+      "urlToImage": "https://fortune.com/img-assets/wp-content/uploads/2026/10/AP26295756135756-e1792772359930.jpg?resize=1200,600",
+      "publishedAt": "2026-10-27T14:13:30Z"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "NPR"
+      },
+      "author": "Durrie Bouscaren",
+      "title": "A 'Green Army' is out to thwart El Niño flooding",
+      "description": "In Nairobi, a city prone to floods, workers in the \"Green Army\" are making preparations to prevent disaster when El Niño arrives.",
+      "url": "https://www.npr.org/2026/10/27/nx-s1-6010370/el-nino-floods-nairobi-green-army",
+      "urlToImage": "https://npr.brightspotcdn.com/dims3/default/strip/false/crop/3000x1688+0+156/resize/1400/quality/85/format/webp/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F72%2F44%2Fd112cbb547e3923dc5993338148a%2Fkenya-flood.jpg",
+      "publishedAt": "2026-10-27T14:12:35Z"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "[Removed]"
+      },
+      "author": null,
+      "title": "[Removed]",
+      "description": "[Removed]",
+      "url": "https://removed.com",
+      "urlToImage": null,
+      "publishedAt": "1970-01-01T00:00:00Z"
+    }
+  ]
+}

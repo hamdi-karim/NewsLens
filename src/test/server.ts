@@ -1,4 +1,4 @@
 import { setupServer } from "msw/node";
+import { handlers } from "./handlers";
 
-// Per-source handlers are added as adapters land (Spec 02).
-export const server = setupServer();
+export const server = setupServer(...handlers);
