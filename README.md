@@ -36,6 +36,14 @@ npm run dev
 
 Open http://localhost:5173. The Vite dev server proxies `/api/*` exactly like Nginx does in Docker.
 
+### Mock mode (no API keys, no quota)
+
+```bash
+VITE_USE_MOCKS=true npm run dev
+```
+
+`/api/*` is answered in the browser by [MSW](https://mswjs.io) with the same fixtures the tests use (trimmed real responses in `src/test/fixtures/`), so UI work doesn't spend the free-tier quotas. Mock mode only exists in the dev server; production builds contain no mock code.
+
 ## Scripts
 
 | Script               | Purpose                                             |
@@ -58,3 +66,5 @@ The free tiers are tight, so responses are cached for 5 minutes and searches are
 | The Guardian   | ~1 request/second, ~500/day             |
 | New York Times | 5 requests/minute, 500/day              |
 | NewsAPI.org    | ~100 requests/day, development use only |
+
+NewsAPI's free plan only covers about the last month, so a search starting earlier skips NewsAPI (without spending a request) and shows results from the other sources.

@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from "node:url";
 import type { ClientRequest } from "node:http";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { msw } from "msw/vite";
 import { loadEnv, type ProxyOptions } from "vite";
 import { defineConfig } from "vitest/config";
 
@@ -80,7 +81,13 @@ export default defineConfig(({ mode, command }) => {
   }
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      // Serves MSW's worker script for dev mock mode (VITE_USE_MOCKS). Dev server only,
+      // so nothing mock-related is emitted into dist/.
+      command === "serve" && msw({ mode: "worker-only" }),
+    ],
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
     },
