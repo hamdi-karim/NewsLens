@@ -27,12 +27,13 @@ export function ArticleGrid({
         isUpdating && "opacity-60",
       )}
     >
-      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {/* Explicit grid-cols-1: an implicit column would grow to fit long unbreakable text. */}
+      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {articles.map((article, index) => {
-          // The first result leads: full row on tablet, two of three columns on desktop.
+          // The first result leads and takes the whole first row at every width.
           const isFeatured = index === 0;
           return (
-            <li key={article.id} className={cn(isFeatured && "md:col-span-2")}>
+            <li key={article.id} className={cn(isFeatured && "col-span-full")}>
               <ArticleCard article={article} isFeatured={isFeatured} />
             </li>
           );

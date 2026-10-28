@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { Newspaper } from "lucide-react";
+import { Newspaper, Zap } from "lucide-react";
 import { useState } from "react";
 import type { Article } from "@/domain/types";
 import { cn } from "@/shared/lib/utils";
@@ -8,7 +8,7 @@ import { getSourceDisplay } from "./sourceConfig";
 
 interface ArticleCardProps {
   article: Article;
-  // The lead story: wider (side by side from md), larger title, "Top story" label.
+  // The lead story: full row, side by side from md, larger type, "Top story" label.
   isFeatured?: boolean;
 }
 
@@ -29,35 +29,40 @@ export function ArticleCard({ article, isFeatured = false }: ArticleCardProps) {
     <article
       className={cn(
         "relative flex h-full flex-col overflow-hidden rounded-xl border bg-card transition-shadow hover:shadow-md has-[a:focus-visible]:ring-3 has-[a:focus-visible]:ring-ring/50",
-        isFeatured && "md:flex-row",
+        isFeatured && "border-primary/30 bg-muted/40 shadow-sm md:flex-row",
       )}
     >
+      {/* Fixed-size box; the image is absolutely positioned, so its natural size never sets the card's height. */}
       <div
         className={cn(
-          "aspect-video bg-muted",
-          isFeatured && "md:aspect-auto md:min-h-64 md:w-1/2 md:shrink-0",
+          "relative aspect-video shrink-0 bg-muted",
+          isFeatured && "md:aspect-auto md:min-h-80 md:w-1/2",
         )}
       >
         {showImage ? (
           <img
             src={article.imageUrl}
             alt={article.title}
-            loading="lazy"
+            loading={isFeatured ? "eager" : "lazy"}
             onError={() => setHasImageError(true)}
-            className="size-full object-cover"
+            className="absolute inset-0 size-full object-cover"
           />
         ) : (
-          <div className="flex size-full items-center justify-center text-muted-foreground">
+          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
             <Newspaper aria-hidden="true" className="size-8" />
           </div>
         )}
       </div>
 
       <div
-        className={cn("flex flex-1 flex-col gap-2 p-4", isFeatured && "md:p-6")}
+        className={cn(
+          "flex flex-1 flex-col gap-2 p-4",
+          isFeatured && "gap-3 md:justify-center md:p-8",
+        )}
       >
         {isFeatured && (
-          <p className="text-xs font-semibold tracking-widest text-primary uppercase">
+          <p className="inline-flex w-fit items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-semibold tracking-wide text-primary-foreground uppercase">
+            <Zap aria-hidden="true" className="size-3.5" />
             Top story
           </p>
         )}
@@ -73,7 +78,10 @@ export function ArticleCard({ article, isFeatured = false }: ArticleCardProps) {
         <h2
           className={cn(
             "leading-snug font-semibold",
-            isFeatured ? "text-xl md:text-2xl" : "text-base",
+            // Regular cards clamp and reserve 2 lines, so every card lines up.
+            isFeatured
+              ? "line-clamp-4 text-2xl font-bold tracking-tight lg:text-3xl"
+              : "line-clamp-2 min-h-[2lh] text-base",
           )}
         >
           <a
@@ -87,20 +95,38 @@ export function ArticleCard({ article, isFeatured = false }: ArticleCardProps) {
           </a>
         </h2>
 
-        {article.description && (
+        {/* Rendered even when empty on regular cards, to keep the reserved space. */}
+        {(article.description || !isFeatured) && (
           <p
             className={cn(
-              "text-sm text-muted-foreground",
-              isFeatured ? "line-clamp-4 md:text-base" : "line-clamp-3",
+              "text-muted-foreground",
+              isFeatured
+                ? "line-clamp-4 text-base md:text-lg"
+                : "line-clamp-3 min-h-[3lh] text-sm",
             )}
           >
             {article.description}
           </p>
         )}
 
-        <p className="mt-auto pt-2 text-xs text-muted-foreground">
-          {article.author && <span>{article.author} · </span>}
-          <time dateTime={article.publishedAt}>{relativeDate}</time>
+        {/* One line: some bylines list a dozen authors, which would stretch the whole row. */}
+        <p
+          className={cn(
+            "flex min-w-0 gap-1 text-xs text-muted-foreground",
+            isFeatured ? "pt-1 md:text-sm" : "mt-auto pt-2",
+          )}
+        >
+          {article.author && (
+            <>
+              <span className="min-w-0 truncate" title={article.author}>
+                {article.author}
+              </span>
+              <span aria-hidden="true">·</span>
+            </>
+          )}
+          <time dateTime={article.publishedAt} className="shrink-0">
+            {relativeDate}
+          </time>
         </p>
       </div>
     </article>
