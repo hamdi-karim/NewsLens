@@ -64,3 +64,24 @@ export interface NewsSource {
   // Throws UnsupportedQueryError when it can't serve the query at all.
   search(query: ArticleQuery, signal?: AbortSignal): Promise<SourcePage>;
 }
+
+export interface Preferences {
+  sources: SourceId[]; // empty = all sources
+  categories: Category[]; // empty = all categories
+  authors: string[]; // boost only, never filter
+}
+
+export const EMPTY_PREFERENCES: Preferences = {
+  sources: [],
+  categories: [],
+  authors: [],
+};
+
+// Where preferences are kept (localStorage today, an accounts API later).
+export interface PreferencesStore {
+  // Returns the same object until the stored value changes (useSyncExternalStore needs this).
+  get(): Preferences;
+  // Throws if the value can't be stored.
+  set(preferences: Preferences): void;
+  subscribe(listener: () => void): () => void;
+}
