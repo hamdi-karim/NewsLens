@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { Providers } from "@/app/providers";
 import { createQueryClient } from "@/app/queryClient";
-import { routes } from "@/app/routes";
+import { createRoutes } from "@/app/routes";
 import { EMPTY_PREFERENCES, type Preferences } from "@/domain/types";
 import { createMemoryPreferencesStore } from "./preferencesStore";
 
@@ -18,7 +18,7 @@ export function renderRoute(
   const queryClient = createQueryClient();
   queryClient.setDefaultOptions({ queries: { retry: false } });
   const preferencesStore = createMemoryPreferencesStore(preferences);
-  const router = createMemoryRouter(routes, { initialEntries: [path] });
+  const router = createMemoryRouter(createRoutes(), { initialEntries: [path] });
 
   return {
     router,

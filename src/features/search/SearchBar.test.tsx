@@ -5,6 +5,9 @@ import { renderRoute } from "@/test/render";
 
 const searchBox = () =>
   screen.getByRole("searchbox", { name: "Search articles" });
+// /search is a lazy route: nothing renders until its chunk has loaded.
+const findSearchBox = () =>
+  screen.findByRole("searchbox", { name: "Search articles" });
 
 describe("SearchBar", () => {
   it("navigates to /search after typing pauses, and Back returns to the previous page", async () => {
@@ -25,7 +28,7 @@ describe("SearchBar", () => {
     const user = userEvent.setup();
     const { router } = renderRoute("/search?q=ai&categories=science");
 
-    await user.clear(searchBox());
+    await user.clear(await findSearchBox());
     await user.type(searchBox(), "space");
 
     await waitFor(() =>
@@ -45,7 +48,7 @@ describe("SearchBar", () => {
 
   it("shows the keyword when the URL changes from outside", async () => {
     const { router } = renderRoute("/search?q=ai");
-    expect(searchBox()).toHaveValue("ai");
+    expect(await findSearchBox()).toHaveValue("ai");
 
     await act(() => router.navigate("/search?q=climate"));
 
