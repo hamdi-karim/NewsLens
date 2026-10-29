@@ -3,6 +3,7 @@ import { SOURCE_IDS } from "@/domain/types";
 import { makeQuery } from "@/test/query";
 import {
   clearFilters,
+  countActiveFilters,
   hasActiveFilters,
   parseSearchParams,
   toSearchParams,
@@ -120,6 +121,51 @@ describe("hasActiveFilters", () => {
       hasActiveFilters(makeQuery({ categories: ["health"], sources: all })),
     ).toBe(true);
     expect(hasActiveFilters(makeQuery({ sources: ["nyt"] }))).toBe(true);
+  });
+});
+
+describe("countActiveFilters", () => {
+  const all = [...SOURCE_IDS];
+
+  it("is 0 for the default query, whatever the keyword", () => {
+    expect(countActiveFilters(makeQuery({ keyword: "ai", sources: all }))).toBe(
+      0,
+    );
+  });
+
+  it("counts a date range once, even with both bounds", () => {
+    expect(
+      countActiveFilters(
+        makeQuery({ from: "2026-10-01", to: "2026-10-07", sources: all }),
+      ),
+    ).toBe(1);
+  });
+
+  it("counts each category", () => {
+    expect(
+      countActiveFilters(
+        makeQuery({ categories: ["world", "health"], sources: all }),
+      ),
+    ).toBe(2);
+  });
+
+  it("counts a narrowed source list once, however many sources remain", () => {
+    expect(countActiveFilters(makeQuery({ sources: ["nyt"] }))).toBe(1);
+    expect(
+      countActiveFilters(makeQuery({ sources: ["nyt", "guardian"] })),
+    ).toBe(1);
+  });
+
+  it("adds them up", () => {
+    expect(
+      countActiveFilters(
+        makeQuery({
+          from: "2026-10-01",
+          categories: ["world", "health"],
+          sources: ["nyt"],
+        }),
+      ),
+    ).toBe(4);
   });
 });
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
@@ -33,6 +33,8 @@ export function DateFilter({ range, onRangeChange }: DateFilterProps) {
   const [customPickedFor, setCustomPickedFor] = useState<string | null>(null);
   const selection =
     customPickedFor === rangeKey ? "custom" : detectDateSelection(range);
+  // Unique per instance: the filter panel can be mounted in the sidebar and the sheet.
+  const id = useId();
 
   const handleSelectionChange = (value: string) => {
     const next = SELECTIONS.find((item) => item === value);
@@ -51,8 +53,8 @@ export function DateFilter({ range, onRangeChange }: DateFilterProps) {
       <RadioGroup value={selection} onValueChange={handleSelectionChange}>
         {SELECTIONS.map((item) => (
           <div key={item} className="flex items-center gap-2">
-            <RadioGroupItem value={item} id={`date-${item}`} />
-            <Label htmlFor={`date-${item}`} className="font-normal">
+            <RadioGroupItem value={item} id={`${id}-date-${item}`} />
+            <Label htmlFor={`${id}-date-${item}`} className="font-normal">
               {SELECTION_LABELS[item]}
             </Label>
           </div>
@@ -62,9 +64,9 @@ export function DateFilter({ range, onRangeChange }: DateFilterProps) {
       {selection === "custom" && (
         <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
           <div className="flex flex-col gap-1">
-            <Label htmlFor="date-from">From</Label>
+            <Label htmlFor={`${id}-date-from`}>From</Label>
             <Input
-              id="date-from"
+              id={`${id}-date-from`}
               type="date"
               value={range.from ?? ""}
               max={range.to}
@@ -77,9 +79,9 @@ export function DateFilter({ range, onRangeChange }: DateFilterProps) {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <Label htmlFor="date-to">To</Label>
+            <Label htmlFor={`${id}-date-to`}>To</Label>
             <Input
-              id="date-to"
+              id={`${id}-date-to`}
               type="date"
               value={range.to ?? ""}
               min={range.from}

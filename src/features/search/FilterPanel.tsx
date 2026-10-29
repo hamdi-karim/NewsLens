@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { CATEGORIES, type ArticleQuery } from "@/domain/types";
 import { SOURCE_DISPLAYS } from "@/features/articles";
 import { toggle } from "@/shared/lib/toggle";
@@ -16,6 +17,8 @@ interface FilterPanelProps {
 export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
   const sourceIds = SOURCE_DISPLAYS.map((source) => source.id);
   const isLastSource = query.sources.length === 1;
+  // The panel can be mounted twice (sidebar + mobile sheet), so ids must be unique per instance.
+  const id = useId();
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,7 +35,7 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
         {CATEGORIES.map((category) => (
           <div key={category} className="flex items-center gap-2">
             <Checkbox
-              id={`category-${category}`}
+              id={`${id}-category-${category}`}
               checked={query.categories.includes(category)}
               onCheckedChange={() =>
                 onQueryChange({
@@ -42,7 +45,7 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
               }
             />
             <Label
-              htmlFor={`category-${category}`}
+              htmlFor={`${id}-category-${category}`}
               className="font-normal capitalize"
             >
               {category}
@@ -58,7 +61,7 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
           return (
             <div key={source.id} className="flex items-center gap-2">
               <Checkbox
-                id={`source-${source.id}`}
+                id={`${id}-source-${source.id}`}
                 checked={isChecked}
                 // At least one source must stay selected.
                 disabled={isChecked && isLastSource}
@@ -69,7 +72,10 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
                   })
                 }
               />
-              <Label htmlFor={`source-${source.id}`} className="font-normal">
+              <Label
+                htmlFor={`${id}-source-${source.id}`}
+                className="font-normal"
+              >
                 <span
                   aria-hidden="true"
                   className={cn("size-2.5 rounded-full", source.badgeClassName)}

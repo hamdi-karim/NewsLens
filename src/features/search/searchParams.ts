@@ -52,13 +52,19 @@ export function toSearchParams(query: ArticleQuery): URLSearchParams {
   return params;
 }
 
+// For the mobile Filters badge: a date range counts once, each category once, and a
+// narrowed source list once (it reads as one "sources" filter, however many are left).
+export function countActiveFilters(query: ArticleQuery): number {
+  return (
+    (query.from || query.to ? 1 : 0) +
+    query.categories.length +
+    (query.sources.length < SOURCE_IDS.length ? 1 : 0)
+  );
+}
+
 // True when any filter (not the keyword) differs from the defaults.
 export function hasActiveFilters(query: ArticleQuery): boolean {
-  return (
-    Boolean(query.from || query.to) ||
-    query.categories.length > 0 ||
-    query.sources.length < SOURCE_IDS.length
-  );
+  return countActiveFilters(query) > 0;
 }
 
 function parseDate(value: string | null): string | undefined {

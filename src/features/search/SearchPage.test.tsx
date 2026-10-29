@@ -217,3 +217,53 @@ describe("SearchPage (real adapters + aggregator, MSW at the network edge)", () 
     expect(screen.queryByRole("button", { name: "Load more" })).toBeNull();
   });
 });
+
+// jsdom applies no CSS, so the sidebar and the sheet trigger are both rendered; the
+// breakpoint switch (hidden / lg:hidden) is checked in the browser.
+describe("SearchPage mobile filter sheet", () => {
+  it("shows the active filter count on the trigger", async () => {
+    renderRoute(
+      "/search?q=ai&from=2026-10-01&categories=world&categories=health&sources=nyt",
+    );
+
+    expect(
+      await screen.findByRole("button", { name: "Filters, 4 active" }),
+    ).toBeInTheDocument();
+  });
+
+  it("applies filters live and returns focus to the trigger on close", async () => {
+    const user = userEvent.setup();
+    const { router } = renderRoute("/search?q=ai");
+    await screen.findByText("15 articles");
+    const trigger = screen.getByRole("button", { name: "Filters" });
+
+    await user.click(trigger);
+    const sheet = screen.getByRole("dialog", { name: "Filters" });
+    await user.click(
+      within(sheet).getByRole("checkbox", { name: "technology" }),
+    );
+
+    expect(router.state.location.search).toBe("?q=ai&categories=technology");
+
+    await user.click(
+      within(sheet).getByRole("button", { name: "Show results" }),
+    );
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    // Radix hides everything outside the open sheet (aria-hidden), so the count is checked after closing.
+    expect(trigger).toHaveFocus();
+    expect(trigger).toHaveAccessibleName("Filters, 1 active");
+  });
+
+  it("closes on Escape", async () => {
+    const user = userEvent.setup();
+    renderRoute("/search");
+    await screen.findByText(/^\d+ articles$/);
+
+    await user.click(screen.getByRole("button", { name: "Filters" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  });
+});
