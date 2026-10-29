@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { Article } from "@/domain/types";
-import { boostByAuthors, matchesAuthor, splitByline } from "./authors";
+import {
+  boostByAuthors,
+  matchesAuthor,
+  splitByline,
+  suggestAuthors,
+} from "./authors";
 
 function makeArticle(id: string, author?: string): Article {
   return {
@@ -41,6 +46,42 @@ describe("matchesAuthor", () => {
     ["V (formerly Eve Ensler)", "V", true],
   ])("%j / %j → %s", (byline, name, expected) => {
     expect(matchesAuthor(byline, name)).toBe(expected);
+  });
+});
+
+describe("suggestAuthors", () => {
+  it("returns names from bylines, most frequent first", () => {
+    const articles = [
+      makeArticle("a", "Ann Lee"),
+      makeArticle("b", "By Jane Doe and Ann Lee"),
+      makeArticle("c", "jane doe"), // not capitalized: skipped
+      makeArticle("d"),
+      makeArticle("e", "Seán O’Neill"),
+    ];
+
+    expect(suggestAuthors(articles)).toEqual([
+      "Ann Lee",
+      "Jane Doe",
+      "Seán O’Neill",
+    ]);
+  });
+
+  it("skips fragments that don't look like a name", () => {
+    const articles = [
+      makeArticle(
+        "a",
+        "Annika Surmeier, Senior lecturer, University of Cape Town",
+      ),
+      makeArticle("b", "ET Online"),
+      makeArticle("c", "Madonna"),
+      makeArticle("d", "Lisa Cox Environment and climate correspondent"),
+    ];
+
+    expect(suggestAuthors(articles)).toEqual([
+      "Annika Surmeier",
+      "ET Online",
+      "Lisa Cox Environment",
+    ]);
   });
 });
 

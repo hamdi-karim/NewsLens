@@ -44,6 +44,29 @@ export function boostByAuthors(
   return { articles: [...followed, ...rest], followedIds };
 }
 
+// Bylines also carry job titles and affiliations ("Senior Lecturer, University of …"),
+// so only 2–3 capitalized words count as a name. A heuristic, not name parsing.
+const NAME_PATTERN = /^\p{Lu}[\p{L}'’.-]*(?: \p{Lu}[\p{L}'’.-]*){1,2}$/u;
+
+// Names from loaded bylines, most frequent first (ties: first seen).
+export function suggestAuthors(articles: Article[]): string[] {
+  const counts = new Map<string, { name: string; count: number }>();
+  for (const article of articles) {
+    if (!article.author) continue;
+    for (const name of splitByline(article.author)) {
+      if (!NAME_PATTERN.test(name)) continue;
+      const key = name.toLowerCase();
+      const entry = counts.get(key) ?? { name, count: 0 };
+      entry.count += 1;
+      counts.set(key, entry);
+    }
+  }
+  // Stable sort keeps first-seen order among equal counts.
+  return [...counts.values()]
+    .sort((a, b) => b.count - a.count)
+    .map((entry) => entry.name);
+}
+
 // Lowercase words separated by single spaces; punctuation dropped.
 function toWords(text: string): string {
   return text

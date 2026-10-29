@@ -2,6 +2,7 @@ import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import type { PreferencesStore } from "@/domain/types";
 import { PreferencesStoreContext } from "@/features/preferences";
+import { Toaster } from "@/shared/ui/sonner";
 
 interface ProvidersProps {
   queryClient: QueryClient;
@@ -20,6 +21,7 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       <PreferencesStoreContext value={preferencesStore}>
         {children}
+        <Toaster />
       </PreferencesStoreContext>
     </QueryClientProvider>
   );

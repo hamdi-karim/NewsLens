@@ -1,5 +1,6 @@
 import { CATEGORIES, type ArticleQuery } from "@/domain/types";
 import { SOURCE_DISPLAYS } from "@/features/articles";
+import { toggle } from "@/shared/lib/toggle";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
@@ -10,14 +11,6 @@ import { clearFilters, hasActiveFilters } from "./searchParams";
 interface FilterPanelProps {
   query: ArticleQuery;
   onQueryChange: (query: ArticleQuery) => void;
-}
-
-// Adds or removes `item`, keeping the canonical order of `allowed`.
-function toggle<T>(allowed: readonly T[], selected: T[], item: T): T[] {
-  const isSelected = selected.includes(item);
-  return allowed.filter((value) =>
-    value === item ? !isSelected : selected.includes(value),
-  );
 }
 
 export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
