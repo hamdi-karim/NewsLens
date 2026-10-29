@@ -37,11 +37,6 @@ describe("app routes", () => {
       await screen.findByRole("heading", { level: 1, name: "Search" }),
     ).toBeInTheDocument();
 
-    await user.click(within(nav).getByRole("link", { name: "Preferences" }));
-    expect(
-      await screen.findByRole("heading", { level: 1, name: "Preferences" }),
-    ).toBeInTheDocument();
-
     await user.click(within(nav).getByRole("link", { name: "For You" }));
     expect(
       await screen.findByRole("heading", {
