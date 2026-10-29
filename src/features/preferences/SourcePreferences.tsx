@@ -27,7 +27,7 @@ export function SourcePreferences({
           <Label
             key={source.id}
             htmlFor={`pref-source-${source.id}`}
-            className="flex cursor-pointer items-center gap-3 rounded-lg border p-3 font-normal has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-muted/50"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border p-3 font-normal has-data-[state=checked]:border-primary has-data-[state=checked]:bg-muted/50"
           >
             <Checkbox
               id={`pref-source-${source.id}`}
