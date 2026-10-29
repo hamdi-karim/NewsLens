@@ -5,6 +5,8 @@ import { ArticleCard } from "./ArticleCard";
 
 interface ArticleGridProps {
   articles: Article[];
+  // Articles by authors the reader follows get a label.
+  followedIds: ReadonlySet<string>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   // True while new filters load over the previous results.
@@ -14,6 +16,7 @@ interface ArticleGridProps {
 
 export function ArticleGrid({
   articles,
+  followedIds,
   hasNextPage,
   isFetchingNextPage,
   isUpdating,
@@ -34,7 +37,11 @@ export function ArticleGrid({
           const isFeatured = index === 0;
           return (
             <li key={article.id} className={cn(isFeatured && "col-span-full")}>
-              <ArticleCard article={article} isFeatured={isFeatured} />
+              <ArticleCard
+                article={article}
+                isFeatured={isFeatured}
+                isFromFollowedAuthor={followedIds.has(article.id)}
+              />
             </li>
           );
         })}

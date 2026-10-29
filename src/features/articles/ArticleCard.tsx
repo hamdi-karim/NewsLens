@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { Newspaper, Zap } from "lucide-react";
+import { Newspaper, UserCheck, Zap } from "lucide-react";
 import { useState } from "react";
 import type { Article } from "@/domain/types";
 import { cn } from "@/shared/lib/utils";
@@ -10,9 +10,14 @@ interface ArticleCardProps {
   article: Article;
   // The lead story: full row, side by side from md, larger type, "Top story" label.
   isFeatured?: boolean;
+  isFromFollowedAuthor?: boolean;
 }
 
-export function ArticleCard({ article, isFeatured = false }: ArticleCardProps) {
+export function ArticleCard({
+  article,
+  isFeatured = false,
+  isFromFollowedAuthor = false,
+}: ArticleCardProps) {
   const [hasImageError, setHasImageError] = useState(false);
 
   const source = getSourceDisplay(article.source);
@@ -64,6 +69,12 @@ export function ArticleCard({ article, isFeatured = false }: ArticleCardProps) {
           <p className="inline-flex w-fit items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-semibold tracking-wide text-primary-foreground uppercase">
             <Zap aria-hidden="true" className="size-3.5" />
             Top story
+          </p>
+        )}
+        {isFromFollowedAuthor && (
+          <p className="inline-flex w-fit items-center gap-1 text-xs font-medium text-primary">
+            <UserCheck aria-hidden="true" className="size-3.5" />
+            From an author you follow
           </p>
         )}
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

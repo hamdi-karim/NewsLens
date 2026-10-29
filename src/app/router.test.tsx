@@ -5,7 +5,7 @@ import { renderRoute } from "@/test/render";
 
 describe("app routes", () => {
   it.each([
-    ["/", "For You"],
+    ["/", /^Good (morning|afternoon|evening)$/],
     ["/search", "Search"],
     ["/preferences", "Preferences"],
   ])("renders %s", async (path, heading) => {
@@ -44,7 +44,10 @@ describe("app routes", () => {
 
     await user.click(within(nav).getByRole("link", { name: "For You" }));
     expect(
-      await screen.findByRole("heading", { level: 1, name: "For You" }),
+      await screen.findByRole("heading", {
+        level: 1,
+        name: /^Good (morning|afternoon|evening)$/,
+      }),
     ).toBeInTheDocument();
   });
 });
