@@ -16,7 +16,12 @@ export function renderRoute(
   { preferences = EMPTY_PREFERENCES }: RenderRouteOptions = {},
 ) {
   const queryClient = createQueryClient();
-  queryClient.setDefaultOptions({ queries: { retry: false } });
+  // setDefaultOptions replaces, so merge to keep the app's caching (staleTime etc.).
+  const defaults = queryClient.getDefaultOptions();
+  queryClient.setDefaultOptions({
+    ...defaults,
+    queries: { ...defaults.queries, retry: false },
+  });
   const preferencesStore = createMemoryPreferencesStore(preferences);
   const router = createMemoryRouter(createRoutes(), { initialEntries: [path] });
 
