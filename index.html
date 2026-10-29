@@ -5,6 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NewsLens</title>
+    <script>
+      // Runs before first paint so a dark page never flashes light. Mirrors
+      // themeStore.get() in src/features/theme (same key and fallback).
+      (function () {
+        var choice = null;
+        try {
+          choice = localStorage.getItem("newslens:theme");
+        } catch (e) {}
+        var dark =
+          choice === "dark" ||
+          (choice !== "light" &&
+            matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

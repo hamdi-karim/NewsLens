@@ -122,6 +122,11 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  /* Lighter than in light mode so each badge stands out from the dark card; white text
+     stays above 4.5:1 (ratios in spec 05 notes). */
+  --source-guardian: oklch(0.45 0.14 262);
+  --source-nyt: oklch(0.42 0 0);
+  --source-newsapi: oklch(0.45 0.11 155);
 }
 
 @layer base {

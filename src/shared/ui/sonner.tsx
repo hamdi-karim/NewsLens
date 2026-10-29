@@ -8,12 +8,11 @@ import {
 import type { CSSProperties } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
-// Adapted from the shadcn registry without `next-themes`: there is no dark mode yet,
-// so the theme is fixed to light.
+// Adapted from the shadcn registry without `next-themes`: the app passes `theme` from
+// features/theme, so shared/ui doesn't depend on a feature.
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
-      theme="light"
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="size-4" />,

@@ -3,6 +3,7 @@ import type { MouseEvent } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { PreferencesSheet } from "@/features/preferences";
 import { SearchBar } from "@/features/search";
+import { ThemeToggle } from "@/features/theme";
 import { cn } from "@/shared/lib/utils";
 
 const MAIN_ID = "main";
@@ -66,6 +67,7 @@ export function AppLayout() {
           </nav>
           {/* On /preferences the page is the form; a second one would hold a stale draft. */}
           {pathname !== "/preferences" && <PreferencesSheet />}
+          <ThemeToggle />
         </div>
       </header>
       <main
