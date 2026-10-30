@@ -30,6 +30,16 @@ describe("AppLayout", () => {
     );
   });
 
+  it("keeps the logo decorative so the home link is named by its text", async () => {
+    renderRoute("/search");
+    await screen.findByRole("heading", { level: 1, name: "Search" });
+
+    expect(screen.getByRole("link", { name: "NewsLens" })).toHaveAttribute(
+      "href",
+      "/",
+    );
+  });
+
   it("offers the preferences sheet everywhere except on /preferences", async () => {
     renderRoute("/preferences");
     await screen.findByRole("heading", { level: 1, name: "Preferences" });

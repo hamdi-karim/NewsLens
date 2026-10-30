@@ -5,6 +5,7 @@ import { PreferencesSheet } from "@/features/preferences";
 import { SearchBar } from "@/features/search";
 import { ThemeToggle } from "@/features/theme";
 import { cn } from "@/shared/lib/utils";
+import { Logo } from "@/shared/ui/logo";
 
 const MAIN_ID = "main";
 
@@ -35,8 +36,9 @@ export function AppLayout() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2">
           <NavLink
             to="/"
-            className="mr-auto text-lg font-semibold tracking-tight md:mr-0"
+            className="mr-auto inline-flex items-center gap-2 text-lg font-semibold tracking-tight md:mr-0"
           >
+            <Logo />
             NewsLens
           </NavLink>
           {/* Own row on mobile; between logo and nav from md. */}
