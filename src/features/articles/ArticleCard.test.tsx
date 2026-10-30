@@ -41,16 +41,28 @@ describe("ArticleCard", () => {
   });
 
   it("falls back to a placeholder when the image is missing or fails to load", () => {
-    const { rerender } = render(<ArticleCard article={ARTICLE} />);
-    const image = screen.getByRole("img", { name: ARTICLE.title });
+    const { container, rerender } = render(<ArticleCard article={ARTICLE} />);
+    // alt="" (decorative), so the image has no accessible role to query by.
+    const image = container.querySelector("img");
+    expect(image).toHaveAttribute("src", ARTICLE.imageUrl);
 
-    fireEvent.error(image);
-    expect(screen.queryByRole("img", { name: ARTICLE.title })).toBeNull();
+    fireEvent.error(image!);
+    expect(container.querySelector("img")).toBeNull();
 
     rerender(
       <ArticleCard article={{ ...ARTICLE, id: "x", imageUrl: undefined }} />,
     );
-    expect(screen.queryByRole("img", { name: ARTICLE.title })).toBeNull();
+    expect(container.querySelector("img")).toBeNull();
+  });
+
+  it("loads only the featured image eagerly, at high priority", () => {
+    const { container, rerender } = render(<ArticleCard article={ARTICLE} />);
+    expect(container.querySelector("img")).toHaveAttribute("loading", "lazy");
+
+    rerender(<ArticleCard article={ARTICLE} isFeatured />);
+    const image = container.querySelector("img");
+    expect(image).toHaveAttribute("loading", "eager");
+    expect(image).toHaveAttribute("fetchpriority", "high");
   });
 
   it("labels only the featured card as the top story", () => {

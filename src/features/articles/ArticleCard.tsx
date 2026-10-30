@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import { Newspaper, UserCheck, Zap } from "lucide-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import type { Article } from "@/domain/types";
 import { cn } from "@/shared/lib/utils";
 import { Badge } from "@/shared/ui/badge";
@@ -13,7 +13,9 @@ interface ArticleCardProps {
   isFromFollowedAuthor?: boolean;
 }
 
-export function ArticleCard({
+// Memoized: the grid re-renders on every loading-state change, and each card's props
+// stay the same (TanStack Query keeps article objects referentially stable).
+export const ArticleCard = memo(function ArticleCard({
   article,
   isFeatured = false,
   isFromFollowedAuthor = false,
@@ -47,8 +49,11 @@ export function ArticleCard({
         {showImage ? (
           <img
             src={article.imageUrl}
-            alt={article.title}
+            // Decorative: the title link already names the article.
+            alt=""
             loading={isFeatured ? "eager" : "lazy"}
+            // The featured image is the likely LCP element.
+            fetchPriority={isFeatured ? "high" : "auto"}
             onError={() => setHasImageError(true)}
             className="absolute inset-0 size-full object-cover"
           />
@@ -142,4 +147,4 @@ export function ArticleCard({
       </div>
     </article>
   );
-}
+});
