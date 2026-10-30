@@ -19,6 +19,8 @@ export function createQueryClient(): QueryClient {
       queries: {
         staleTime: FIVE_MINUTES,
         refetchOnWindowFocus: false,
+        // A reconnect would refetch every loaded page; the Retry button covers recovery.
+        refetchOnReconnect: false,
         retry: shouldRetry,
       },
     },

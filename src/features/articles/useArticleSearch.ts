@@ -1,9 +1,11 @@
 import {
   keepPreviousData,
   useInfiniteQuery,
+  useQueryClient,
   type InfiniteData,
+  type QueryClient,
 } from "@tanstack/react-query";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import type {
   Article,
   ArticleQuery,
@@ -37,9 +39,18 @@ export function useArticleSearch(query: ArticleQuery) {
       combinePages(data, query.sort),
     [query.sort],
   );
+  const queryClient = useQueryClient();
+  const queryKey = useMemo(() => articleKeys.search(query), [query]);
+
+  // A stale infinite query refetches every loaded page, each one a call to every
+  // source. Leaving this view keeps only page 1, so coming back costs one fan-out.
+  useEffect(
+    () => () => keepFirstPage(queryClient, queryKey),
+    [queryClient, queryKey],
+  );
 
   return useInfiniteQuery({
-    queryKey: articleKeys.search(query),
+    queryKey,
     queryFn: ({ pageParam, signal }) =>
       fetchArticles({ ...query, ...pageParam }, signal),
     initialPageParam: { page: 1, sources: query.sources } as PageParam,
@@ -54,6 +65,25 @@ export function useArticleSearch(query: ArticleQuery) {
     select,
     placeholderData: keepPreviousData,
   });
+}
+
+function keepFirstPage(
+  queryClient: QueryClient,
+  queryKey: ReturnType<typeof articleKeys.search>,
+): void {
+  const state = queryClient.getQueryState<
+    InfiniteData<AggregatedPage, PageParam>
+  >(queryKey);
+  if (!state?.data || state.data.pages.length <= 1) return;
+  queryClient.setQueryData<InfiniteData<AggregatedPage, PageParam>>(
+    queryKey,
+    {
+      pages: state.data.pages.slice(0, 1),
+      pageParams: state.data.pageParams.slice(0, 1),
+    },
+    // Keep the original timestamp: trimming must not make old data look fresh.
+    { updatedAt: state.dataUpdatedAt },
+  );
 }
 
 // Merges every loaded page again, so duplicates across pages are removed too.
