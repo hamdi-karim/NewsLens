@@ -1,0 +1,27 @@
+# Netlify deploy: the static app from dist/, plus netlify/functions/api.ts as the /api/*
+# proxy (the role Nginx plays in Docker). Keys are set in the Netlify UI, never here.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  environment = { NODE_VERSION = "22" }
+
+[functions]
+  directory = "netlify/functions"
+
+# SPA: unknown paths render index.html. The API function's own path is matched first.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Same cache policy as Nginx: index.html always revalidated, hashed assets cached forever.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
