@@ -1,5 +1,6 @@
+// Kept outside netlify/functions/: Netlify deploys every file there as a function.
 import { describe, expect, it, vi } from "vitest";
-import { handle, toUpstream } from "./api.ts";
+import { handle, toUpstream } from "./functions/api.ts";
 
 const KEYS = {
   GUARDIAN_API_KEY: "guardian-key",
