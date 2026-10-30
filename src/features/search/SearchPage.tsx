@@ -25,7 +25,7 @@ export function SearchPage() {
 
       <section className="flex min-w-0 flex-1 flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="min-w-0 text-2xl font-semibold break-words">
+          <h1 className="min-w-0 text-2xl font-semibold wrap-break-word">
             {heading}
           </h1>
           <div className="shrink-0 lg:hidden">
