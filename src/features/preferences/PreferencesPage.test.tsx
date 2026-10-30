@@ -73,6 +73,8 @@ describe("PreferencesPage", () => {
 
     await user.click(screen.getByRole("button", { name: "Remove Jane Doe" }));
     expect(within(followed).queryByText("Jane Doe")).toBeNull();
+    // The remove button is gone, so focus moves to the input instead of the page.
+    expect(input).toHaveFocus();
   });
 
   it("suggests authors from articles already loaded, without fetching", async () => {
