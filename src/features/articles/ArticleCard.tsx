@@ -4,6 +4,7 @@ import { memo, useState } from "react";
 import type { Article } from "@/domain/types";
 import { cn } from "@/shared/lib/utils";
 import { Badge } from "@/shared/ui/badge";
+import { getCategoryColorClass } from "./categoryConfig";
 import { getSourceDisplay } from "./sourceConfig";
 
 interface ArticleCardProps {
@@ -87,7 +88,15 @@ export const ArticleCard = memo(function ArticleCard({
             {sourceText}
           </Badge>
           {article.category && (
-            <span className="capitalize">{article.category}</span>
+            // Tinted, unlike the solid source badge, so the two never read as the same thing.
+            <span
+              className={cn(
+                "inline-flex h-5 items-center rounded-full bg-(--chip-color)/12 px-2 font-medium text-(--chip-color) capitalize dark:bg-(--chip-color)/20",
+                getCategoryColorClass(article.category),
+              )}
+            >
+              {article.category}
+            </span>
           )}
         </div>
 

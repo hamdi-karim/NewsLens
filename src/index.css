@@ -42,6 +42,17 @@
   --color-source-guardian: var(--source-guardian);
   --color-source-nyt: var(--source-nyt);
   --color-source-newsapi: var(--source-newsapi);
+  --color-source-guardian-accent: var(--source-guardian-accent);
+  --color-source-nyt-accent: var(--source-nyt-accent);
+  --color-source-newsapi-accent: var(--source-newsapi-accent);
+  --color-category-world: var(--category-world);
+  --color-category-business: var(--category-business);
+  --color-category-technology: var(--category-technology);
+  --color-category-science: var(--category-science);
+  --color-category-health: var(--category-health);
+  --color-category-sports: var(--category-sports);
+  --color-category-culture: var(--category-culture);
+  --color-category-politics: var(--category-politics);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -91,6 +102,20 @@
   --source-guardian: oklch(0.33 0.12 262);
   --source-nyt: oklch(0.2 0 0);
   --source-newsapi: oklch(0.45 0.11 155);
+  /* Source color for chip borders and checks; in light mode the badge color itself. */
+  --source-guardian-accent: var(--source-guardian);
+  --source-nyt-accent: var(--source-nyt);
+  --source-newsapi-accent: var(--source-newsapi);
+  /* Category colors: same lightness and chroma, hues spread apart. Used as text on their
+     own 12% tint (4.8:1 at worst, science) and as dots and borders. */
+  --category-world: oklch(0.48 0.13 250);
+  --category-business: oklch(0.48 0.13 85);
+  --category-technology: oklch(0.48 0.13 290);
+  --category-science: oklch(0.48 0.13 200);
+  --category-health: oklch(0.48 0.13 160);
+  --category-sports: oklch(0.48 0.13 45);
+  --category-culture: oklch(0.48 0.13 330);
+  --category-politics: oklch(0.48 0.13 15);
 }
 
 .dark {
@@ -131,6 +156,19 @@
   --source-guardian: oklch(0.45 0.14 262);
   --source-nyt: oklch(0.42 0 0);
   --source-newsapi: oklch(0.45 0.11 155);
+  /* The badge colors are too dark to mark a chip on the dark page; these give ~10:1. */
+  --source-guardian-accent: oklch(0.78 0.1 262);
+  --source-nyt-accent: oklch(0.88 0 0);
+  --source-newsapi-accent: oklch(0.78 0.12 155);
+  /* Light enough to read as text on their 20% tint over the dark card (6:1 at worst). */
+  --category-world: oklch(0.8 0.12 250);
+  --category-business: oklch(0.8 0.12 85);
+  --category-technology: oklch(0.8 0.12 290);
+  --category-science: oklch(0.8 0.12 200);
+  --category-health: oklch(0.8 0.12 160);
+  --category-sports: oklch(0.8 0.12 45);
+  --category-culture: oklch(0.8 0.12 330);
+  --category-politics: oklch(0.8 0.12 15);
 }
 
 @layer base {

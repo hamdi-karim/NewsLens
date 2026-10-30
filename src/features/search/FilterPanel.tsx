@@ -1,11 +1,8 @@
-import { useId } from "react";
 import { CATEGORIES, type ArticleQuery } from "@/domain/types";
-import { SOURCE_DISPLAYS } from "@/features/articles";
+import { getCategoryColorClass, SOURCE_DISPLAYS } from "@/features/articles";
 import { toggle } from "@/shared/lib/toggle";
-import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
-import { Checkbox } from "@/shared/ui/checkbox";
-import { Label } from "@/shared/ui/label";
+import { ChipCheckbox } from "@/shared/ui/chip";
 import { DateFilter } from "./DateFilter";
 import { clearFilters, hasActiveFilters } from "./searchParams";
 
@@ -17,8 +14,6 @@ interface FilterPanelProps {
 export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
   const sourceIds = SOURCE_DISPLAYS.map((source) => source.id);
   const isLastSource = query.sources.length === 1;
-  // The panel can be mounted twice (sidebar + mobile sheet), so ids must be unique per instance.
-  const id = useId();
 
   return (
     <div className="flex flex-col gap-6">
@@ -30,12 +25,14 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
         }
       />
 
-      <fieldset className="flex flex-col gap-2">
+      <fieldset>
         <legend className="mb-3 text-sm font-semibold">Category</legend>
-        {CATEGORIES.map((category) => (
-          <div key={category} className="flex items-center gap-2">
-            <Checkbox
-              id={`${id}-category-${category}`}
+        <div className="flex flex-wrap gap-2">
+          {CATEGORIES.map((category) => (
+            // The chip's text is its accessible name, so no separate label or id.
+            <ChipCheckbox
+              key={category}
+              className={`capitalize ${getCategoryColorClass(category)}`}
               checked={query.categories.includes(category)}
               onCheckedChange={() =>
                 onQueryChange({
@@ -43,25 +40,22 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
                   categories: toggle(CATEGORIES, query.categories, category),
                 })
               }
-            />
-            <Label
-              htmlFor={`${id}-category-${category}`}
-              className="font-normal capitalize"
             >
               {category}
-            </Label>
-          </div>
-        ))}
+            </ChipCheckbox>
+          ))}
+        </div>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-2">
+      <fieldset>
         <legend className="mb-3 text-sm font-semibold">Source</legend>
-        {SOURCE_DISPLAYS.map((source) => {
-          const isChecked = query.sources.includes(source.id);
-          return (
-            <div key={source.id} className="flex items-center gap-2">
-              <Checkbox
-                id={`${id}-source-${source.id}`}
+        <div className="flex flex-wrap gap-2">
+          {SOURCE_DISPLAYS.map((source) => {
+            const isChecked = query.sources.includes(source.id);
+            return (
+              <ChipCheckbox
+                key={source.id}
+                className={source.chipColorClassName}
                 checked={isChecked}
                 // At least one source must stay selected.
                 disabled={isChecked && isLastSource}
@@ -71,20 +65,12 @@ export function FilterPanel({ query, onQueryChange }: FilterPanelProps) {
                     sources: toggle(sourceIds, query.sources, source.id),
                   })
                 }
-              />
-              <Label
-                htmlFor={`${id}-source-${source.id}`}
-                className="font-normal"
               >
-                <span
-                  aria-hidden="true"
-                  className={cn("size-2.5 rounded-full", source.badgeClassName)}
-                />
                 {source.label}
-              </Label>
-            </div>
-          );
-        })}
+              </ChipCheckbox>
+            );
+          })}
+        </div>
       </fieldset>
 
       {hasActiveFilters(query) && (

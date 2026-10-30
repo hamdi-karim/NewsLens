@@ -1,6 +1,8 @@
 import { CATEGORIES, type Category } from "@/domain/types";
+import { getCategoryColorClass } from "@/features/articles";
 import { toggle } from "@/shared/lib/toggle";
-import { Button } from "@/shared/ui/button";
+import { cn } from "@/shared/lib/utils";
+import { ChipMark, chipClassName } from "@/shared/ui/chip";
 import { PreferenceSection } from "./PreferenceSection";
 
 interface CategoryPreferencesProps {
@@ -22,16 +24,20 @@ export function CategoryPreferences({
         {CATEGORIES.map((category) => {
           const isSelected = selected.includes(category);
           return (
-            <Button
+            <button
               key={category}
               type="button"
-              variant={isSelected ? "default" : "outline"}
               aria-pressed={isSelected}
-              className="rounded-full capitalize"
+              className={cn(
+                chipClassName,
+                "cursor-pointer capitalize",
+                getCategoryColorClass(category),
+              )}
               onClick={() => onChange(toggle(CATEGORIES, selected, category))}
             >
+              <ChipMark />
               {category}
-            </Button>
+            </button>
           );
         })}
       </div>

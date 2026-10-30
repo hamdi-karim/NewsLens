@@ -8,10 +8,18 @@ const BADGE_CLASS_NAMES: Record<SourceId, string> = {
   newsapi: "bg-source-newsapi text-white",
 };
 
+// Sets --chip-color for filter and preference chips (see shared/ui/chip).
+const CHIP_COLOR_CLASS_NAMES: Record<SourceId, string> = {
+  guardian: "[--chip-color:var(--color-source-guardian-accent)]",
+  nyt: "[--chip-color:var(--color-source-nyt-accent)]",
+  newsapi: "[--chip-color:var(--color-source-newsapi-accent)]",
+};
+
 export interface SourceDisplay {
   id: SourceId;
   label: string;
   badgeClassName: string;
+  chipColorClassName: string;
 }
 
 // Registered sources in priority order, with their display details.
@@ -20,6 +28,7 @@ export const SOURCE_DISPLAYS: readonly SourceDisplay[] = SOURCES.map(
     id: source.id,
     label: source.label,
     badgeClassName: BADGE_CLASS_NAMES[source.id],
+    chipColorClassName: CHIP_COLOR_CLASS_NAMES[source.id],
   }),
 );
 
@@ -29,6 +38,7 @@ export function getSourceDisplay(id: SourceId): SourceDisplay {
       id,
       label: id,
       badgeClassName: BADGE_CLASS_NAMES[id],
+      chipColorClassName: CHIP_COLOR_CLASS_NAMES[id],
     }
   );
 }

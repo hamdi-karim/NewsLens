@@ -1,7 +1,8 @@
 import { useId, useState } from "react";
+import { ChipRadioItem } from "@/shared/ui/chip";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { RadioGroup } from "@/shared/ui/radio-group";
 import {
   DATE_PRESETS,
   detectDateSelection,
@@ -50,14 +51,15 @@ export function DateFilter({ range, onRangeChange }: DateFilterProps) {
   return (
     <fieldset className="flex flex-col gap-3">
       <legend className="mb-3 text-sm font-semibold">Date</legend>
-      <RadioGroup value={selection} onValueChange={handleSelectionChange}>
+      <RadioGroup
+        value={selection}
+        onValueChange={handleSelectionChange}
+        className="flex flex-wrap gap-2"
+      >
         {SELECTIONS.map((item) => (
-          <div key={item} className="flex items-center gap-2">
-            <RadioGroupItem value={item} id={`${id}-date-${item}`} />
-            <Label htmlFor={`${id}-date-${item}`} className="font-normal">
-              {SELECTION_LABELS[item]}
-            </Label>
-          </div>
+          <ChipRadioItem key={item} value={item}>
+            {SELECTION_LABELS[item]}
+          </ChipRadioItem>
         ))}
       </RadioGroup>
 
