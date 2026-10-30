@@ -6,7 +6,9 @@ import { Input } from "@/shared/ui/input";
 import { parseSearchParams, toSearchParams } from "./searchParams";
 
 const SEARCH_PATH = "/search";
-const DEBOUNCE_MS = 400;
+// Short: this only limits URL writes. SearchPage debounces the results again (300 ms),
+// so a request still waits for typing to pause ~450 ms in total.
+const DEBOUNCE_MS = 150;
 
 // Global keyword input. On /search it edits `q` in place (replace); elsewhere it
 // navigates to /search once (push), so Back returns to the previous page.
@@ -73,6 +75,8 @@ export function SearchBar() {
         placeholder="Search articles…"
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
+        // Fetch the lazy /search route chunk early, so the first search doesn't wait for it.
+        onFocus={() => void import("./pages")}
         className="h-9 pl-8"
       />
     </form>
