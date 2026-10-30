@@ -8,7 +8,7 @@ export const NYT_SECTIONS: SectionMap = {
   science: ["Science"],
   health: ["Health"],
   sports: ["Sports"],
-  culture: ["Arts"],
+  culture: ["Arts", "Movies", "Books", "Theater"],
   politics: ["U.S."],
 };
 

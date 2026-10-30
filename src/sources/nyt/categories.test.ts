@@ -17,6 +17,10 @@ describe("NYT categories", () => {
     }
   });
 
+  it("maps arts sub-sections to culture", () => {
+    expect(nytCategoryOf("Movies")).toBe("culture");
+  });
+
   it("has no category for unknown or missing sections", () => {
     expect(nytCategoryOf("Briefing")).toBeUndefined();
     expect(nytCategoryOf(undefined)).toBeUndefined();

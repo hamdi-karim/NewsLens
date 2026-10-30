@@ -17,6 +17,11 @@ describe("Guardian categories", () => {
     }
   });
 
+  it("maps arts sub-sections to culture", () => {
+    expect(guardianCategoryOf("film")).toBe("culture");
+    expect(guardianCategoryOf("books")).toBe("culture");
+  });
+
   it("has no category for unknown or missing sections", () => {
     expect(guardianCategoryOf("commentisfree")).toBeUndefined();
     expect(guardianCategoryOf(undefined)).toBeUndefined();

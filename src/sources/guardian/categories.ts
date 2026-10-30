@@ -1,6 +1,7 @@
 import { createCategoryLookup, type SectionMap } from "../categoryLookup";
 
-// App category → Guardian section ids.
+// App category → Guardian section ids. Arts articles mostly live in their own
+// sections (film, music, books…), not under `culture`.
 export const GUARDIAN_SECTIONS: SectionMap = {
   world: ["world"],
   business: ["business"],
@@ -8,7 +9,15 @@ export const GUARDIAN_SECTIONS: SectionMap = {
   science: ["science"],
   health: ["society"],
   sports: ["sport"],
-  culture: ["culture"],
+  culture: [
+    "culture",
+    "film",
+    "music",
+    "books",
+    "tv-and-radio",
+    "artanddesign",
+    "stage",
+  ],
   politics: ["politics"],
 };
 
