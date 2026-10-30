@@ -4,7 +4,7 @@
 
 One clean, fast, personalized feed of articles from **The Guardian**, **The New York Times**, and **NewsAPI.org**.
 
-**Live demo:** https://jade-shortbread-6c33cf.netlify.app
+**Live demo:** https://newslens-app.netlify.app
 
 Built with Vite, React 19, strict TypeScript, TanStack Query, React Router, Tailwind v4, and shadcn/ui. Tested with Vitest, React Testing Library, and MSW. Served by Nginx in Docker, or on Netlify with a serverless proxy.
 
