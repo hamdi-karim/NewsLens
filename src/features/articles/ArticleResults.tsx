@@ -67,6 +67,7 @@ export function ArticleResults({
               followedIds={followedIds}
               hasNextPage={search.hasNextPage}
               isFetchingNextPage={search.isFetchingNextPage}
+              isLoadMoreError={search.isFetchNextPageError}
               isUpdating={search.isPlaceholderData}
               onLoadMore={() => void search.fetchNextPage()}
             />

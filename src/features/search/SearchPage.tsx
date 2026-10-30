@@ -1,11 +1,18 @@
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import { FilterPanel } from "./FilterPanel";
 import { FilterSheet } from "./FilterSheet";
 import { clearFilters } from "./searchParams";
 import { SearchResults } from "./SearchResults";
 import { useSearchQuery } from "./useSearchQuery";
 
+// Several quick filter clicks make one request per source, not one per click: an
+// aborted request has already counted against the providers' quotas.
+const RESULTS_DEBOUNCE_MS = 300;
+
 export function SearchPage() {
   const { query, setQuery, hasActiveFilters } = useSearchQuery();
+  // The filters show the live query; only the results wait for clicking to pause.
+  const resultsQuery = useDebounce(query, RESULTS_DEBOUNCE_MS);
   const heading = query.keyword ? `Results for “${query.keyword}”` : "Search";
 
   return (
@@ -26,7 +33,7 @@ export function SearchPage() {
           </div>
         </div>
         <SearchResults
-          query={query}
+          query={resultsQuery}
           hasActiveFilters={hasActiveFilters}
           onClearFilters={() => setQuery(clearFilters(query))}
         />

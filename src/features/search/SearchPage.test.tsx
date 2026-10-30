@@ -216,6 +216,52 @@ describe("SearchPage (real adapters + aggregator, MSW at the network edge)", () 
     ).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Load more" })).toBeNull();
   });
+
+  it("keeps the results and says so when Load more fails", async () => {
+    const user = userEvent.setup();
+    server.use(
+      http.get("/api/guardian/search", ({ request }) => {
+        const page = new URL(request.url).searchParams.get("page") ?? "1";
+        if (page !== "1") return HttpResponse.json({}, { status: 500 });
+        return HttpResponse.json({
+          response: { ...guardianSearch.response, currentPage: 1, pages: 2 },
+        });
+      }),
+    );
+    renderRoute("/search?q=ai&sources=guardian");
+    await screen.findByText("5 articles");
+
+    await user.click(screen.getByRole("button", { name: "Load more" }));
+
+    expect(
+      await screen.findByText("Couldn't load more articles. Please try again."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("5 articles")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Load more" }),
+    ).toBeInTheDocument();
+  });
+
+  it("makes one request per source for several quick filter clicks", async () => {
+    const user = userEvent.setup();
+    renderRoute("/search?q=ai");
+    await screen.findByText("15 articles");
+    const guardianRequests: URL[] = [];
+    server.events.on("request:start", ({ request }) => {
+      const url = new URL(request.url);
+      if (url.pathname === "/api/guardian/search") guardianRequests.push(url);
+    });
+
+    await user.click(screen.getByRole("checkbox", { name: "world" }));
+    await user.click(screen.getByRole("checkbox", { name: "technology" }));
+    await user.click(screen.getByRole("checkbox", { name: "science" }));
+
+    await waitFor(() => expect(guardianRequests).toHaveLength(1));
+    // Past the debounce: no request for the intermediate selections follows.
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    expect(guardianRequests).toHaveLength(1);
+    server.events.removeAllListeners();
+  });
 });
 
 // jsdom applies no CSS, so the sidebar and the sheet trigger are both rendered; the

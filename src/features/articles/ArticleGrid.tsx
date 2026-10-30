@@ -9,6 +9,8 @@ interface ArticleGridProps {
   followedIds: ReadonlySet<string>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
+  // The last "Load more" failed; the results already shown stay.
+  isLoadMoreError: boolean;
   // True while new filters load over the previous results.
   isUpdating: boolean;
   onLoadMore: () => void;
@@ -19,6 +21,7 @@ export function ArticleGrid({
   followedIds,
   hasNextPage,
   isFetchingNextPage,
+  isLoadMoreError,
   isUpdating,
   onLoadMore,
 }: ArticleGridProps) {
@@ -48,7 +51,12 @@ export function ArticleGrid({
       </ul>
 
       {hasNextPage && (
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-2">
+          {isLoadMoreError && !isFetchingNextPage && (
+            <p role="alert" className="text-sm text-destructive">
+              Couldn't load more articles. Please try again.
+            </p>
+          )}
           <Button
             variant="outline"
             onClick={onLoadMore}
