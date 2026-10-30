@@ -11,21 +11,32 @@ import { RouteErrorBoundary } from "./RouteErrorBoundary";
 export const createRoutes = (): RouteObject[] => [
   {
     element: <AppLayout />,
-    errorElement: <RouteErrorBoundary />,
+    // Only if the layout itself fails; it has no <main> around it then.
+    errorElement: (
+      <main>
+        <RouteErrorBoundary />
+      </main>
+    ),
     children: [
-      { index: true, element: <ForYouPage /> },
       {
-        path: "search",
-        // Only /search is split: the header already needs the preferences form and
-        // Radix on every page, so splitting the other routes would save ~1 kB.
-        // The router loads the chunk before navigating, so there's no Suspense fallback.
-        lazy: {
-          Component: async () =>
-            (await import("@/features/search/pages")).SearchPage,
-        },
+        // A page error renders inside the layout, so the header and nav keep working.
+        errorElement: <RouteErrorBoundary />,
+        children: [
+          { index: true, element: <ForYouPage /> },
+          {
+            path: "search",
+            // Only /search is split: the header already needs the preferences form and
+            // Radix on every page, so splitting the other routes would save ~1 kB.
+            // The router loads the chunk before navigating, so there's no Suspense fallback.
+            lazy: {
+              Component: async () =>
+                (await import("@/features/search/pages")).SearchPage,
+            },
+          },
+          { path: "preferences", element: <PreferencesPage /> },
+          { path: "*", element: <NotFoundPage /> },
+        ],
       },
-      { path: "preferences", element: <PreferencesPage /> },
-      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ];
