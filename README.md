@@ -4,7 +4,7 @@
 
 One clean, fast, personalized feed of articles from **The Guardian**, **The New York Times**, and **NewsAPI.org**.
 
-Built with Vite, React 19, strict TypeScript, TanStack Query, React Router, Tailwind v4, and shadcn/ui. Tested with Vitest, React Testing Library, and MSW. Served by Nginx in Docker.
+Built with Vite, React 19, strict TypeScript, TanStack Query, React Router, Tailwind v4, and shadcn/ui. Tested with Vitest, React Testing Library, and MSW. Served by Nginx in Docker, or on Netlify with a serverless proxy.
 
 ## Features
 
@@ -82,6 +82,16 @@ The free tiers are tight, so responses are cached for 5 minutes and searches are
 
 NewsAPI's free plan only covers about the last month, so a search starting earlier skips NewsAPI (without spending a request) and shows results from the other sources.
 
+## Deploy (Netlify)
+
+The repo deploys to Netlify as-is ([`netlify.toml`](netlify.toml)): Netlify builds the app and serves `dist/`, and a [Netlify Function](netlify/functions/api.ts) takes over Nginx's job for `/api/*`, with the same allowlist and the keys added server-side.
+
+1. In Netlify, **Add new site → Import an existing project** and pick this repository. Build settings come from `netlify.toml`.
+2. In **Site configuration → Environment variables**, add `GUARDIAN_API_KEY`, `NYT_API_KEY`, and `NEWSAPI_API_KEY`.
+3. Deploy. Every push to `main` redeploys.
+
+The browser still only calls same-origin `/api/*`, so the keys never reach the bundle. Docker stays the way to run it yourself.
+
 ## Architecture
 
 ```mermaid
@@ -97,7 +107,7 @@ flowchart LR
     N["NYT adapter"]
     A["NewsAPI adapter"]
   end
-  Proxy["API proxy: /api/*<br/>Nginx (Docker) · Vite (dev)<br/>adds the API keys"]
+  Proxy["API proxy: /api/*<br/>Nginx (Docker) · Vite (dev) · Netlify Function<br/>adds the API keys"]
   APIs["Guardian · NYT · NewsAPI"]
 
   UI <--> URL
@@ -138,18 +148,19 @@ The suggested list also included OpenNews, NewsCred, and BBC News. OpenNews and 
 
 ## Key decisions
 
-| Decision                                                                                     | Alternative rejected                   | Why                                                                                                                                                                                   |
-| -------------------------------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Nginx proxy** for `/api/*` ([config](docker/nginx/default.conf.template))                  | A small Express backend                | Solves CORS, NewsAPI's localhost restriction, and keeping keys out of the bundle, with config instead of code. An allowlist means the keys can only reach the endpoints the app uses. |
-| **`Promise.allSettled` + 8 s timeout per source** ([aggregator](src/services/aggregator.ts)) | `Promise.all`                          | One failing source can't discard the others. The timeout stops one slow source from holding the page.                                                                                 |
-| **URL as the source of truth** for search state                                              | A global store                         | Shareable links and Back/Forward for free, with no state to sync                                                                                                                      |
-| **TanStack Query** for server state, no global state library                                 | Redux, Zustand                         | The only shared client state is preferences and theme. Both are small stores read with `useSyncExternalStore`.                                                                        |
-| **`PreferencesStore` interface** over `localStorage`                                         | Calling `localStorage` from components | Validated and versioned, injected through context (tests use an in-memory store). Server-side accounts would mean a new implementation, not a rewrite.                                |
-| **Capability-driven filtering**                                                              | Per-source `if`s in the aggregator     | Each adapter declares which filters its API supports server-side. The aggregator applies the rest client-side.                                                                        |
-| **Authors boost, they don't filter**                                                         | Filtering the feed by followed authors | No provider has reliable author search. Filtering would often leave an empty feed. Matching bylines after the merge costs no extra request.                                           |
-| **Dedupe by normalized URL**, registry order wins                                            | Fuzzy title matching                   | NewsAPI re-publishes Guardian/NYT stories. A URL match is predictable and needs no source-specific code.                                                                              |
-| **"Load more"** with per-source pages                                                        | Infinite scroll; merged cursors        | Simple, accessible, and only calls sources that still have results. The full list is re-sorted after each page.                                                                       |
-| **Route splitting only where it pays** (`/search` is lazy)                                   | Lazy-loading every route               | Measured: the other routes share most of their code, so splitting them deferred almost nothing                                                                                        |
+| Decision                                                                                     | Alternative rejected                   | Why                                                                                                                                                                                                                         |
+| -------------------------------------------------------------------------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nginx proxy** for `/api/*` ([config](docker/nginx/default.conf.template))                  | A small Express backend                | Solves CORS, NewsAPI's localhost restriction, and keeping keys out of the bundle, with config instead of code. An allowlist means the keys can only reach the endpoints the app uses.                                       |
+| **Netlify Function** as the hosted proxy ([function](netlify/functions/api.ts))              | GitHub Pages; Netlify redirect rules   | Pages is static only, so the keys would ship in the bundle. Redirect rules can't read environment variables, so the key would be committed in `netlify.toml`. The function is the Nginx allowlist in code, with unit tests. |
+| **`Promise.allSettled` + 8 s timeout per source** ([aggregator](src/services/aggregator.ts)) | `Promise.all`                          | One failing source can't discard the others. The timeout stops one slow source from holding the page.                                                                                                                       |
+| **URL as the source of truth** for search state                                              | A global store                         | Shareable links and Back/Forward for free, with no state to sync                                                                                                                                                            |
+| **TanStack Query** for server state, no global state library                                 | Redux, Zustand                         | The only shared client state is preferences and theme. Both are small stores read with `useSyncExternalStore`.                                                                                                              |
+| **`PreferencesStore` interface** over `localStorage`                                         | Calling `localStorage` from components | Validated and versioned, injected through context (tests use an in-memory store). Server-side accounts would mean a new implementation, not a rewrite.                                                                      |
+| **Capability-driven filtering**                                                              | Per-source `if`s in the aggregator     | Each adapter declares which filters its API supports server-side. The aggregator applies the rest client-side.                                                                                                              |
+| **Authors boost, they don't filter**                                                         | Filtering the feed by followed authors | No provider has reliable author search. Filtering would often leave an empty feed. Matching bylines after the merge costs no extra request.                                                                                 |
+| **Dedupe by normalized URL**, registry order wins                                            | Fuzzy title matching                   | NewsAPI re-publishes Guardian/NYT stories. A URL match is predictable and needs no source-specific code.                                                                                                                    |
+| **"Load more"** with per-source pages                                                        | Infinite scroll; merged cursors        | Simple, accessible, and only calls sources that still have results. The full list is re-sorted after each page.                                                                                                             |
+| **Route splitting only where it pays** (`/search` is lazy)                                   | Lazy-loading every route               | Measured: the other routes share most of their code, so splitting them deferred almost nothing                                                                                                                              |
 
 ## Testing
 
@@ -173,7 +184,8 @@ Components are queried by role and label, not by class or test id, so the tests 
 
 ## Trade-offs and known limitations
 
-- **No public live demo.** NewsAPI's free Developer plan is for development only. A hosted demo would need a paid plan or NewsAPI turned off.
+- **The live demo uses NewsAPI's free Developer plan,** which is meant for development and allows ~100 requests a day. When the quota runs out, NewsAPI shows as unavailable and the other two sources keep working.
+- **The proxy allowlist exists three times:** Nginx (Docker), the Vite dev proxy, and the Netlify Function. Each runs in a different runtime, so each keeps a small copy. The function's copy is unit-tested.
 - **Author search is weak.** No provider offers reliable author search, so authors are a boost based on byline matching, not a filter.
 - **Ordering can shift on "Load more".** New pages are merged and the list is re-sorted, so an article can move. That's the cost of a single sorted list across sources with separate pagination.
 - **NewsAPI only covers about the last 30 days** on the free plan. Older date ranges skip it, and the page says so.
