@@ -17,6 +17,9 @@ context/
 CLAUDE.md
 .claude/settings.local.json
 .playwright-mcp/
+PRODUCT.md
+.impeccable/
+.github/hooks/
 
 # Logs
 *.log
