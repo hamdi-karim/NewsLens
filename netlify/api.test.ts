@@ -83,6 +83,37 @@ describe("handle", () => {
     );
   });
 
+  it("caches a 200 response on Netlify's CDN", async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(new Response("{}", { status: 200 }));
+
+    const response = await handle(
+      new Request("https://newslens.example/api/newsapi/top-headlines?page=1"),
+      KEYS,
+      fetchImpl,
+    );
+
+    expect(response.headers.get("Netlify-CDN-Cache-Control")).toBe(
+      "public, durable, s-maxage=300, stale-while-revalidate=300",
+    );
+  });
+
+  it.each([401, 429, 500])("does not cache a %i response", async (status) => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(new Response("{}", { status }));
+
+    const response = await handle(
+      new Request("https://newslens.example/api/guardian/search?q=x"),
+      KEYS,
+      fetchImpl,
+    );
+
+    expect(response.status).toBe(status);
+    expect(response.headers.get("Netlify-CDN-Cache-Control")).toBeNull();
+  });
+
   it("answers 404 without calling upstream for unknown paths", async () => {
     const fetchImpl = vi.fn<typeof fetch>();
     const response = await handle(

@@ -5,6 +5,14 @@
 type ApiKeyName = "GUARDIAN_API_KEY" | "NYT_API_KEY" | "NEWSAPI_API_KEY";
 type ApiKeys = Partial<Record<ApiKeyName, string>>;
 
+// Netlify's CDN reads this header; browsers never see it (TanStack Query owns client
+// caching). Every visitor shares the cached copy, which saves the free-tier quotas
+// (NewsAPI ~100 req/day). The cache key is path + query (Netlify's default for functions).
+// - s-maxage=300: fresh for 5 minutes
+// - stale-while-revalidate=300: 5 more minutes served instantly while one request refreshes
+// - durable: one stored copy shared by all of Netlify's servers, not one per server
+const CDN_CACHE = "public, durable, s-maxage=300, stale-while-revalidate=300";
+
 interface Upstream {
   url: string;
   headers: Record<string, string>;
@@ -65,6 +73,10 @@ export async function handle(
   const headers = new Headers();
   const contentType = response.headers.get("content-type");
   if (contentType) headers.set("content-type", contentType);
+  // Shared CDN cache for successful responses only: a 429 or 401 is never cached.
+  if (response.status === 200) {
+    headers.set("Netlify-CDN-Cache-Control", CDN_CACHE);
+  }
   return new Response(response.body, { status: response.status, headers });
 }
 
