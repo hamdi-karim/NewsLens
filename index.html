@@ -5,6 +5,15 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NewsLens</title>
+    <meta
+      name="description"
+      content="One personalized, searchable feed of news from The Guardian, The New York Times, and NewsAPI."
+    />
+    <!-- Open connections to the image CDNs while JS and API calls are in flight, so the
+         first card's image (the LCP element) doesn't wait on DNS/TCP/TLS. No crossorigin:
+         <img> requests are no-cors. -->
+    <link rel="preconnect" href="https://media.guim.co.uk" />
+    <link rel="preconnect" href="https://static01.nyt.com" />
     <script>
       // Runs before first paint so a dark page never flashes light. Mirrors
       // themeStore.get() in src/features/theme (same key and fallback).

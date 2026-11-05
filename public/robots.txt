@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+# The API proxy spends free-tier quota (NewsAPI ~100 req/day); keep crawlers off it.
+Disallow: /api/
